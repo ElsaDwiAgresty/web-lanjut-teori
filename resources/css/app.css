@@ -1,0 +1,14 @@
+/* styles.css */
+.menu-card {
+    width: 18rem;
+    margin: 10px;
+}
+.menu-card img {
+    height: 50px;
+    object-fit: cover;
+}
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
