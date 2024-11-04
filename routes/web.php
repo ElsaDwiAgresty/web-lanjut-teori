@@ -35,3 +35,8 @@ Route::get('reservasi/create', [PelangganController::class, 'reservasi'])->name(
 Route::post('reservasi', [PelangganController::class, 'store'])->name('pelanggan.reservasi.store');
 
 Route::get('registrasi', [PelangganController::class, 'indexRegistrasi'])->name('pelanggan.registrasi');
+Route::get('registrasi/create', [PelangganController::class, 'registrasi'])->name('pelanggan.registrasi.create');
+Route::post('registrasi', [PelangganController::class, 'storeRegistrasi'])->name('pelanggan.registrasi.store');
+
+Route::get('login', [PelangganController::class, 'indexLogin'])->name('pelanggan.login');
+Route::post('login', [PelangganController::class, 'login'])->name('login');
