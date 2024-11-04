@@ -9,8 +9,8 @@
                 <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan nama lengkap">
             </div>
             <div class="mb-3">
-                <label for="tipeReservasi" class="form-label">Tipe Reservasi</label>
-                <select class="form-control" id="tipeReservasi" name="tipeReservasi">
+                <label for="tipe_reservasi" class="form-label">Tipe Reservasi</label>
+                <select class="form-control" id="tipe_reservasi" name="tipe_reservasi">
                     <option value="">Pilih tipe reservasi</option>
                     <option value="family">Family</option>
                     <option value="vip">VIP</option>
@@ -21,8 +21,8 @@
             </div>
 
             <div class="mb-3">
-                <label for="nomorMeja" class="form-label">Nomor Meja</label>
-                <select class="form-control" id="nomorMeja" name="nomorMeja">
+                <label for="nomor_meja" class="form-label">Nomor Meja</label>
+                <select class="form-control" id="nomor_meja" name="nomor_meja">
                     <option value="">Pilih nomor meja</option>
                     <option value="1">1</option>
                     <option value="2">2</option>

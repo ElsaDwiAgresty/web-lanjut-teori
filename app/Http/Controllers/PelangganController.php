@@ -24,8 +24,8 @@ class PelangganController extends Controller
         // Validasi data yang diterima dari form
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
-            'tipeReservasi' => 'required|string|max:255',
-            'nomorMeja' => 'required|string|max:255',
+            'tipe_reservasi' => 'required|string|max:255',
+            'nomor_meja' => 'required|string|max:255',
         ]);
 
         // Buat objek reservasi baru

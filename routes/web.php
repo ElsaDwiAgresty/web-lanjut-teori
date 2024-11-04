@@ -32,6 +32,6 @@ Route::get('menu/create', [AdminController::class, 'createMenu'])->name('admin.m
 // Rute untuk melihat dan membuat reservasi
 Route::get('reservasi', [PelangganController::class, 'indexReservasi'])->name('pelanggan.reservasi');
 Route::get('reservasi/create', [PelangganController::class, 'reservasi'])->name('pelanggan.reservasi.create');
-Route::post('reservasi', [PelangganController::class, 'storeReservasi'])->name('pelanggan.reservasi.store');
+Route::post('reservasi', [PelangganController::class, 'store'])->name('pelanggan.reservasi.store');
 
 Route::get('registrasi', [PelangganController::class, 'indexRegistrasi'])->name('pelanggan.registrasi');
