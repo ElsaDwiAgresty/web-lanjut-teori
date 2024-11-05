@@ -34,7 +34,10 @@ class PelangganModel extends Model implements AuthenticatableContract
         return $this->hasMany(UlasanModel::class, 'id_ulasan');
     }
 
-    public function getPelanggan() {
+    public function getPelanggan($id = null) {
+        if($id != null) {
+            return $this->where('pelanggan.id_pelanggan', $id)->first();
+        }
         return $this->all();
     }
 }

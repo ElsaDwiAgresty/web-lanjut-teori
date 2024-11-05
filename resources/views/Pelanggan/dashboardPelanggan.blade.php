@@ -2,8 +2,9 @@
 
 @section('content')
     <div class="container">
-        <h1>Halo, !</h1>
+        <h1>Halo, {{ $data['nama'] }}!</h1>
         <p>Selamat datang di dashboard pelanggan.</p>
+        <a href="{{ route('pelanggan.logout') }}">Logout</a>
 
         <!-- Contoh konten dashboard -->
         <div class="row my-4">
