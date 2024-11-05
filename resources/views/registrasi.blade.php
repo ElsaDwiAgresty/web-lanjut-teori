@@ -53,6 +53,7 @@
                             </div>
 
                             <button type="submit" class="w-100 text-white text-center" style="background-color: #2F4F4F;">Daftar</button>
+                            <span>Sudah Memiliki akun?<a href={{ route('login') }}>Login</a></span>
                         </form>
                     </div>
                 </div>

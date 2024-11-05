@@ -77,27 +77,58 @@ class PelangganController extends Controller
         return view('login');
     }
 
+    public function dashboard()
+        {
+            // Ambil data pengguna yang login
+            $user = Auth::user();
+            return view('pelanggan/dashboardPelanggan', compact('user'));
+        }
 
     public function login(Request $request)
     {
-    $credentials = $request->validate([
-        'email' => 'required|email',
-        'password' => 'required|string',
-    ]);
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
 
-    // Cari pengguna berdasarkan email
-    $user = PelangganModel::where('email', $credentials['email'])->first();
+        // Cari pengguna berdasarkan email
+        $user = PelangganModel::where('email', $credentials['email'])->first();
 
-    // Jika pengguna ditemukan dan password sesuai
-    if ($user && Hash::check($credentials['password'], $user->password)) {
-        // Simpan data pengguna ke sesi sebagai autentikasi manual
-        Auth::login($user);
-        
-        // Redirect ke halaman dashboard atau halaman lain yang sesuai
-        return redirect()->route('pelanggan.login')->with('success', 'Anda berhasil login!');
+        // Jika pengguna ditemukan dan password sesuai
+        if ($user && Hash::check($credentials['password'], $user->password)) {
+            // Simpan data pengguna ke sesi sebagai autentikasi manual
+            Auth::login($user);
+
+            dd(Auth::check()); // Tambahkan ini untuk memeriksa status login
+            
+            // Redirect ke halaman dashboard 
+            return redirect()->route('pelanggan.dashboard')->with('success', 'Anda berhasil login!');
+        }
+
+        // Jika login gagal
+        return back()->withErrors(['login' => 'Email atau password salah.']);
     }
 
-    // Jika login gagal
-    return back()->withErrors(['login' => 'Email atau password salah.']);
+    public function indexMenu()
+    {
+        $menuItems = MenuModel::all(); // Ambil semua item menu dari database
+        return view('home', compact('menuItems'));
+    }
+
+    public function indexHome()
+{
+    // Ambil data menu dari database
+    $menuItems = MenuModel::all();
+
+    // Contoh data tipe reservasi dan jumlah kursi kosong
+    $reservasiInfo = [
+        ['tipe' => 'Family', 'kursi_kosong' => 10],
+        ['tipe' => 'VIP', 'kursi_kosong' => 5],
+        ['tipe' => 'Couple', 'kursi_kosong' => 8],
+        ['tipe' => 'Business', 'kursi_kosong' => 7],
+        ['tipe' => 'Group', 'kursi_kosong' => 3],
+    ];
+
+    return view('home', compact('menuItems', 'reservasiInfo'));
 }
 }
