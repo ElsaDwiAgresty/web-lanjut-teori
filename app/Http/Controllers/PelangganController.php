@@ -5,18 +5,27 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PelangganModel;
 use App\Models\MenuModel;
-use App\Models\PesananModel;
 use App\Models\ReservasiModel;
-use App\Models\UlasanModel;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class PelangganController extends Controller
 {
+    // Instansi Model
+    public $pelangganModel;
+    public $menuModel;
+    public $reservasiModel;
+
+    public function __construct() {
+        $this->pelangganModel = new PelangganModel();
+        $this->menuModel = new MenuModel();
+        $this->reservasiModel = new ReservasiModel();
+    }
+
     // Menampilkan form reservasi
     public function indexReservasi()
     {
-        $menuItems = MenuModel::all();
+        $menuItems = $this->menuModel->getMenu();
         return view('Pelanggan/Reservasi/create_reservasi', compact('menuItems'));
     }
 
@@ -31,13 +40,12 @@ class PelangganController extends Controller
         ]);
 
         // Buat objek reservasi baru
-        $reservasi = new ReservasiModel();
-        $reservasi->nama = $validated['nama'];
-        $reservasi->tipe_reservasi = $validated['tipe_reservasi'];
-        $reservasi->nomor_meja = $validated['nomor_meja'];
+        $this->reservasiModel->nama = $validated['nama'];
+        $this->reservasiModel->tipe_reservasi = $validated['tipe_reservasi'];
+        $this->reservasiModel->nomor_meja = $validated['nomor_meja'];
         
         // Simpan ke database
-        $reservasi->save();
+        $this->reservasiModel->save();
 
         // Redirect kembali ke halaman form dengan pesan sukses
         return redirect()->route('reservasi')->with('success', 'Reservasi berhasil dibuat!');
@@ -59,14 +67,13 @@ class PelangganController extends Controller
         ]);
 
         // Buat objek reservasi baru
-        $registrasi = new PelangganModel();
-        $registrasi->nama = $validated['nama'];
-        $registrasi->no_hp = $validated['no_hp'];
-        $registrasi->email = $validated['email'];
-        $registrasi->password = Hash::make($validated['password']);;
+        $this->pelangganModel->nama = $validated['nama'];
+        $this->pelangganModel->no_hp = $validated['no_hp'];
+        $this->pelangganModel->email = $validated['email'];
+        $this->pelangganModel->password = Hash::make($validated['password']);;
         
         // Simpan ke database
-        $registrasi->save();
+        $this->pelangganModel->save();
 
         // Redirect kembali ke halaman form dengan pesan sukses
         return redirect()->route('pelanggan.login')->with('success', 'Registrasi berhasil, silahkan login.');
@@ -80,8 +87,11 @@ class PelangganController extends Controller
     public function dashboard()
         {
             // Ambil data pengguna yang login
-            $user = Auth::user();
-            return view('pelanggan/dashboardPelanggan', compact('user'));
+            $data = array();
+            if($id = Session::get('id_pelanggan')){
+                $data = $this->pelangganModel->getPelanggan($id);
+            }
+            return view('pelanggan/dashboardPelanggan', compact('data'));
         }
 
     public function login(Request $request)
@@ -97,9 +107,9 @@ class PelangganController extends Controller
         // Jika pengguna ditemukan dan password sesuai
         if ($user && Hash::check($credentials['password'], $user->password)) {
             // Simpan data pengguna ke sesi sebagai autentikasi manual
-            Auth::login($user);
+            $request->session()->put('id_pelanggan', $user->id_pelanggan);
 
-            dd(Auth::check()); // Tambahkan ini untuk memeriksa status login
+            // dd(Auth::check()); // Tambahkan ini untuk memeriksa status login
             
             // Redirect ke halaman dashboard 
             return redirect()->route('pelanggan.dashboard')->with('success', 'Anda berhasil login!');
@@ -111,24 +121,36 @@ class PelangganController extends Controller
 
     public function indexMenu()
     {
-        $menuItems = MenuModel::all(); // Ambil semua item menu dari database
+        $menuItems = $this->menuModel->getMenu(); // Ambil semua item menu dari database
         return view('home', compact('menuItems'));
     }
 
     public function indexHome()
-{
-    // Ambil data menu dari database
-    $menuItems = MenuModel::all();
+    {
+        // Ambil data menu dari database
+        $menuItems = $this->menuModel->getMenu();
 
-    // Contoh data tipe reservasi dan jumlah kursi kosong
-    $reservasiInfo = [
-        ['tipe' => 'Family', 'kursi_kosong' => 10],
-        ['tipe' => 'VIP', 'kursi_kosong' => 5],
-        ['tipe' => 'Couple', 'kursi_kosong' => 8],
-        ['tipe' => 'Business', 'kursi_kosong' => 7],
-        ['tipe' => 'Group', 'kursi_kosong' => 3],
-    ];
+        $user = array();
+        if($id = session('id_pelanggan'))
+            $user = $this->pelangganModel->getPelanggan($id);
 
-    return view('home', compact('menuItems', 'reservasiInfo'));
-}
+        // Contoh data tipe reservasi dan jumlah kursi kosong
+        $reservasiInfo = [
+            ['tipe' => 'Family', 'kursi_kosong' => 10],
+            ['tipe' => 'VIP', 'kursi_kosong' => 5],
+            ['tipe' => 'Couple', 'kursi_kosong' => 8],
+            ['tipe' => 'Business', 'kursi_kosong' => 7],
+            ['tipe' => 'Group', 'kursi_kosong' => 3],
+        ];
+
+        return view('home', compact('menuItems', ['reservasiInfo', 'user']));
+    }
+
+    public function logout()
+    {
+        if(Session::has('id_pelanggan')){
+            Session::pull('id_pelanggan');
+            return redirect()->route('home');
+        }
+    }
 }
