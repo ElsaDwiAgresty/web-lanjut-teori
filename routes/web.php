@@ -38,5 +38,14 @@ Route::get('registrasi', [PelangganController::class, 'indexRegistrasi'])->name(
 Route::get('registrasi/create', [PelangganController::class, 'registrasi'])->name('pelanggan.registrasi.create');
 Route::post('registrasi', [PelangganController::class, 'storeRegistrasi'])->name('pelanggan.registrasi.store');
 
-Route::get('login', [PelangganController::class, 'indexLogin'])->name('pelanggan.login');
-Route::post('login', [PelangganController::class, 'login'])->name('login');
+Route::get('login', [PelangganController::class, 'indexLogin'])->name('login');
+Route::post('login', [PelangganController::class, 'login'])->name('pelanggan.login');
+
+Route::get('/', [PelangganController::class, 'indexMenu'])->name('home');
+Route::get('/', [PelangganController::class, 'indexHome'])->name('home');
+
+Route::get('/dashboard', [PelangganController::class, 'dashboard'])
+    ->middleware('auth')
+    ->name('pelanggan.dashboard');
+
+Route::get('dashboard', [PelangganController::class, 'dashboard'])->name('dashboard');

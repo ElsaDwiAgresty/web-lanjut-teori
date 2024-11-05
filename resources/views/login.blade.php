@@ -24,7 +24,7 @@
                         <h3>Login Pelanggan</h3>
                     </div>
                     <div class="card-body">
-                        <form action="" method="POST">
+                        <form action="{{ route('login') }}" method="POST">
                             @csrf
 
                             <div class="mb-3">
@@ -44,6 +44,7 @@
                             </div>
 
                             <button type="submit" class="w-100 text-white text-center" style="background-color: #2F4F4F;">Login</button>
+                            <span>Belum Memiliki akun?<a href={{ route('pelanggan.registrasi') }}>SignUp</a></span>
                         </form>
                     </div>
                 </div>
