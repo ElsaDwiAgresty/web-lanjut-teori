@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama_menu');
             $table->string('harga_menu');
             $table->string('foto_menu')->nullable();
+            $table->timestamps();
         });
     }
 

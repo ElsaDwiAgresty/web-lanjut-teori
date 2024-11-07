@@ -4,12 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Auth\Authenticatable;
 
-class PelangganModel extends Model
+
+class PelangganModel extends Model implements AuthenticatableContract
 {
     use HasFactory;
+    use Authenticatable;
 
     protected $table = 'pelanggan';
+
     protected $guarded = ['id_pelanggan'];
     protected $fillable = [
         'nama',
@@ -29,7 +34,10 @@ class PelangganModel extends Model
         return $this->hasMany(UlasanModel::class, 'id_ulasan');
     }
 
-    public function getPelanggan() {
+    public function getPelanggan($id = null) {
+        if($id != null) {
+            return $this->where('pelanggan.id_pelanggan', $id)->first();
+        }
         return $this->all();
     }
 }
