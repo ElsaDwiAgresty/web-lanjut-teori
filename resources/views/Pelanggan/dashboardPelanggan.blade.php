@@ -13,7 +13,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Reservasi Saya</h5>
                         <p class="card-text">Lihat dan kelola reservasi Anda.</p>
-                        <a href="{{ route('pelanggan.reservasi') }}" class="btn btn-primary">Lihat Reservasi</a>
+                        <a href="{{ route('reservasi.saya') }}" class="btn btn-primary">Lihat Reservasi</a>
                     </div>
                 </div>
             </div>

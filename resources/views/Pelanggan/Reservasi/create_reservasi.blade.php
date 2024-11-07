@@ -95,10 +95,6 @@
     <form action="" method="POST">
         @csrf
         <div class="mb-3">
-            <label for="nama" class="form-label">Nama Lengkap</label>
-            <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan nama lengkap">
-        </div>
-        <div class="mb-3">
             <label for="tipe_reservasi" class="form-label">Tipe Reservasi</label>
             <select class="form-control" id="tipe_reservasi" name="tipe_reservasi">
                 <option value="">Pilih tipe reservasi</option>

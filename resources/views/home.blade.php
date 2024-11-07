@@ -112,14 +112,6 @@
     </nav>
 
     <!-- Content -->
-    <!-- <div class="reservasi-info">
-            <h4>Informasi Tipe Reservasi dan Jumlah Kursi Kosong:</h4>
-            <ul>
-                @foreach ($reservasiInfo as $info)
-                    <li><strong>{{ $info['tipe'] }}:</strong> {{ $info['kursi_kosong'] }} kursi kosong</li>
-                @endforeach
-            </ul>
-        </div> -->
 
     <div class="container my-4">
         <h1 class="text-center mb-4">Selamat Datang di Restoran Kami!</h1>
@@ -134,7 +126,11 @@
                 <p>
                     Untuk reservasi, silakan klik tombol di bawah ini untuk memulai proses reservasi Anda.
                 </p>
-                <a href="{{ route('pelanggan.reservasi') }}" class="btn btn-primary">Buat Reservasi</a>
+                @if (session('id_pelanggan'))
+                    <a href="{{ route('pelanggan.reservasi') }}" class="btn btn-primary">Buat Reservasi</a>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-primary" onclick="alert('Anda harus login terlebih dahulu untuk melakukan reservasi.')">Buat Reservasi</a>
+                @endif
             </div>
             <div class="col-md-6">
                 <img src="{{ asset('img/restoran.jpg') }}" alt="Foto Restoran" class="img-fluid rounded" style="width: 100%; height: auto;">

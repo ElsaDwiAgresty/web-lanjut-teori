@@ -25,21 +25,26 @@ Route::get('create', function(){
     return view('create');
 });
 
+//MENU
 Route::get('menu', [AdminController::class, 'indexMenu'])
     ->name('admin.menu.index');
 Route::get('menu/create', [AdminController::class, 'createMenu'])
     ->name('admin.menu.create');
 
 
-// Rute untuk melihat dan membuat reservasi
+// RESERVASI
 Route::get('reservasi', [PelangganController::class, 'indexReservasi'])
     ->name('pelanggan.reservasi')
     ->middleware('loginCheck');
 Route::get('reservasi/create', [PelangganController::class, 'reservasi'])
     ->name('pelanggan.reservasi.create');
-Route::post('reservasi', [PelangganController::class, 'store'])
+Route::post('reservasi', [PelangganController::class, 'storeReservasi'])
     ->name('pelanggan.reservasi.store');
 
+Route::get('/reservasi-saya', [PelangganController::class, 'reservasiSaya'])->name('reservasi.saya');
+
+
+//REGISTRASI
 Route::get('registrasi', [PelangganController::class, 'indexRegistrasi'])
     ->name('pelanggan.registrasi')
     ->middleware('loginCheck');
@@ -48,20 +53,24 @@ Route::get('registrasi/create', [PelangganController::class, 'registrasi'])
 Route::post('registrasi', [PelangganController::class, 'storeRegistrasi'])
     ->name('pelanggan.registrasi.store');
 
+//LOGIN
 Route::get('login', [PelangganController::class, 'indexLogin'])
     ->name('login')
     ->middleware('loginCheck');
 Route::post('login', [PelangganController::class, 'login'])
     ->name('pelanggan.login');
 
+//HOME
 Route::get('/', [PelangganController::class, 'indexMenu'])
     ->name('home');
 Route::get('/', [PelangganController::class, 'indexHome'])
     ->name('home');
 
+//DASHBOARD
 Route::get('dashboard', [PelangganController::class, 'dashboard'])
     ->name('pelanggan.dashboard')
     ->middleware('authCheck');
 
+//LOGOUT
 Route::get('logout', [PelangganController::class, 'logout'])
     ->name('pelanggan.logout');
