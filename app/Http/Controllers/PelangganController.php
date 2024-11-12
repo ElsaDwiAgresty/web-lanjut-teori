@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PelangganModel;
+use App\Models\PesananModel;
 use App\Models\MenuModel;
 use App\Models\ReservasiModel;
 use Illuminate\Support\Facades\Hash;
@@ -193,5 +194,43 @@ class PelangganController extends Controller
 
         return redirect()->route('pelanggan.dashboard')->with('success', 'Profil berhasil diperbarui.');
     }
+
+    //PESANAN
+    public function storePesanan(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'id_reservasi' => 'required|exists:reservasi,id', // Pastikan id_reservasi ada di tabel reservasi
+            'menu' => 'required|array', // Asumsikan menu adalah array dari id_menu yang dipilih
+            'menu.*.jumlah' => 'required|integer|min:1',
+            'menu.*.harga' => 'required|numeric|min:0',
+        ]);
+
+        // Ambil id_pelanggan dari sesi login
+        $id_pelanggan = session('id_pelanggan');
+        
+        // Pastikan id_reservasi berelasi dengan id_pelanggan yang sedang login
+        $reservasi = ReservasiModel::where('id', $request->input('id_reservasi'))
+                                ->where('id_pelanggan', $id_pelanggan)
+                                ->first();
+
+        if (!$reservasi) {
+            return redirect()->back()->withErrors('Reservasi tidak ditemukan atau tidak berhubungan dengan pelanggan ini.');
+        }
+
+        // Simpan setiap pesanan yang berhubungan dengan reservasi
+        foreach ($request->input('menu') as $menuItem) {
+            PesananModel::create([
+                'id_pelanggan' => $id_pelanggan,          // ID pelanggan dari sesi
+                'id_reservasi' => $reservasi->id,         // ID reservasi yang dipilih
+                'jumlah' => $menuItem['jumlah'],
+                'harga_total' => $menuItem['jumlah'] * $menuItem['harga'], // Hitung harga total
+                'id_menu' => $menuItem['id'], // id_menu dari menu item
+            ]);
+        }
+
+        return redirect()->route('pelanggan.dashboard')->with('success', 'Pesanan berhasil dibuat.');
+    }
+
 
 }

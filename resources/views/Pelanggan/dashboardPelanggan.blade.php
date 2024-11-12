@@ -83,6 +83,9 @@
                 </div>
             </div>
         </div>
+        <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+            <a href="{{ route('home') }}" class="btn btn-primary">Home</a>
+        </div>
     </div>
 </div>
 @endsection

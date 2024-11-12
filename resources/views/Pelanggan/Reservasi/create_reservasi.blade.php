@@ -122,7 +122,7 @@
             </select>
         </div>
 
-        <div class="container my-4">
+        <!-- <div class="container my-4">
             <h3>Pilih Menu</h3>
             <div class="row">
                 @foreach ($menuItems as $item)
@@ -134,8 +134,8 @@
                                 <p class="card-text">Rp{{ number_format($item->harga_menu, 0, ',', '.') }}</p>
                                 <div class="quantity-controls">
                                     <button type="button" class="btn btn-outline-primary" onclick="decreaseQuantity('{{ $item->id }}')">-</button>
-                                    <span id="{{ $item->id }}Qty">0</span>
-                                    <input type="hidden" id="{{ $item->id }}Input" name="menu[{{ $item->id }}]" value="0">
+                                    <span id="qty-{{ $item->id }}">0</span>
+                                    <input type="hidden" id="input-{{ $item->id }}" name="menu[{{ $item->id }}]" value="0">
                                     <button type="button" class="btn btn-outline-primary" onclick="increaseQuantity('{{ $item->id }}')">+</button>
                                 </div>
                             </div>
@@ -143,32 +143,34 @@
                     </div>
                 @endforeach
             </div>
-        </div>
+        </div> -->
 
         <button type="submit" class="btn btn-primary">Pesan</button>
     </form>
 </div>
 
-<script>
-    function increaseQuantity(item) {
-        const quantitySpan = document.getElementById(`${item}Qty`);
-        const quantityInput = document.getElementById(`${item}Input`);
-        let currentQuantity = parseInt(quantitySpan.innerText);
-        currentQuantity++;
-        quantitySpan.innerText = currentQuantity;
-        quantityInput.value = currentQuantity;
+<!-- <script>
+    function increaseQuantity(id_menu) {
+        let qtyElement = document.getElementById('qty-' + id_menu);
+        let inputElement = document.getElementById('input-' + id_menu);
+        
+        // Ambil nilai saat ini dan tambahkan 1
+        let currentQty = parseInt(qtyElement.textContent);
+        qtyElement.textContent = currentQty + 1;
+        inputElement.value = currentQty + 1;
     }
 
-    function decreaseQuantity(item) {
-        const quantitySpan = document.getElementById(`${item}Qty`);
-        const quantityInput = document.getElementById(`${item}Input`);
-        let currentQuantity = parseInt(quantitySpan.innerText);
-        if (currentQuantity > 0) {
-            currentQuantity--;
-            quantitySpan.innerText = currentQuantity;
-            quantityInput.value = currentQuantity;
+    function decreaseQuantity(id_menu) {
+        let qtyElement = document.getElementById('qty-' + id_menu);
+        let inputElement = document.getElementById('input-' + id_menu);
+        
+        // Ambil nilai saat ini dan kurangi 1 (jika lebih besar dari 0)
+        let currentQty = parseInt(qtyElement.textContent);
+        if (currentQty > 0) {
+            qtyElement.textContent = currentQty - 1;
+            inputElement.value = currentQty - 1;
         }
     }
-</script>
+</script> -->
 
 @endsection

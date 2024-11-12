@@ -53,6 +53,7 @@ Route::get('registrasi/create', [PelangganController::class, 'registrasi'])
 Route::post('registrasi', [PelangganController::class, 'storeRegistrasi'])
     ->name('pelanggan.registrasi.store');
 
+
 //LOGIN
 Route::get('login', [PelangganController::class, 'indexLogin'])
     ->name('login')
@@ -60,21 +61,24 @@ Route::get('login', [PelangganController::class, 'indexLogin'])
 Route::post('login', [PelangganController::class, 'login'])
     ->name('pelanggan.login');
 
+
 //HOME
 Route::get('/', [PelangganController::class, 'indexMenu'])
     ->name('home');
 Route::get('/', [PelangganController::class, 'indexHome'])
     ->name('home');
 
+
 //DASHBOARD
 Route::get('dashboard', [PelangganController::class, 'dashboard'])
     ->name('pelanggan.dashboard')
     ->middleware('authCheck');
 
+
 //LOGOUT
 Route::get('logout', [PelangganController::class, 'logout'])
     ->name('pelanggan.logout');
 
+
 //PROFIL
 Route::put('/pelanggan/update', [PelangganController::class, 'updateProfil'])->name('pelanggan.profile');
-// Route::get('/pelanggan/update', [PelangganController::class, 'updateProfil'])->name('pelanggan.profile');
