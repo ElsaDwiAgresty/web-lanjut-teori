@@ -74,3 +74,7 @@ Route::get('dashboard', [PelangganController::class, 'dashboard'])
 //LOGOUT
 Route::get('logout', [PelangganController::class, 'logout'])
     ->name('pelanggan.logout');
+
+//PROFIL
+Route::put('/pelanggan/update', [PelangganController::class, 'updateProfil'])->name('pelanggan.profile');
+// Route::get('/pelanggan/update', [PelangganController::class, 'updateProfil'])->name('pelanggan.profile');

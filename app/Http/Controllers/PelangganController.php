@@ -170,4 +170,28 @@ class PelangganController extends Controller
         }
     }
 
+    //PROFIL
+    public function updateProfil(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'nohp' => 'required|string|max:15',
+            'email' => 'required|email',
+            'password' => 'nullable|min:6',
+        ]);
+
+        $user = auth()->user();
+        $user->nama = $request->nama;
+        $user->nohp = $request->nohp;
+        $user->email = $request->email;
+
+        if ($request->password) {
+            $user->password = bcrypt($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->route('pelanggan.dashboard')->with('success', 'Profil berhasil diperbarui.');
+    }
+
 }
