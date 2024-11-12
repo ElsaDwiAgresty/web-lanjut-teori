@@ -171,6 +171,15 @@ class PelangganController extends Controller
     }
 
     //PROFIL
+    public function profil()
+    {
+        $data = array();
+        if($id = Session::get('id_pelanggan')){
+            $data = $this->pelangganModel->getPelanggan($id);
+        }
+        return view('Pelanggan.profile', compact('data'));
+    }
+
     public function updateProfil(Request $request)
     {
         $request->validate([
@@ -180,9 +189,13 @@ class PelangganController extends Controller
             'password' => 'nullable|min:6',
         ]);
 
-        $user = auth()->user();
+        $user = array();
+        if($id = Session::get('id_pelanggan')){
+            $user = $this->pelangganModel->getPelanggan($id);
+        }
+
         $user->nama = $request->nama;
-        $user->nohp = $request->nohp;
+        $user->no_hp = $request->no_hp;
         $user->email = $request->email;
 
         if ($request->password) {

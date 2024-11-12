@@ -76,5 +76,10 @@ Route::get('logout', [PelangganController::class, 'logout'])
     ->name('pelanggan.logout');
 
 //PROFIL
-Route::put('/pelanggan/update', [PelangganController::class, 'updateProfil'])->name('pelanggan.profile');
+Route::get('/pelanggan/profile', [PelangganController::class, 'profil'])
+    ->name('pelanggan.profil')
+    ->middleware('authCheck');
+Route::put('/pelanggan/update', [PelangganController::class, 'updateProfil'])
+    ->name('pelanggan.updateProfil')
+    ->middleware('authCheck');
 // Route::get('/pelanggan/update', [PelangganController::class, 'updateProfil'])->name('pelanggan.profile');
