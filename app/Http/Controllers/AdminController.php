@@ -14,7 +14,7 @@ class AdminController extends Controller
     public function indexMenu()
     {
         $menuItems = MenuModel::all();
-        return view('reservasi', compact('menuItems'));
+        return view('Admin.Kelola.menu', compact('menuItems'));
     }
 
     public function createMenu()
