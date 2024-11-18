@@ -66,6 +66,8 @@ class PelangganController extends Controller
             'tipe_reservasi' => $request->input('tipe_reservasi'),
             'nomor_meja' => $request->input('nomor_meja'),
             'status' => 'Dalam Antrian',  
+            'tgl_reservasi' => $request->input('tgl_reservasi'),
+            'waktu_reservasi' => $request->input('waktu_reservasi')
         ]);
 
         return redirect()->route('pelanggan.dashboard')->with('success', 'Reservasi berhasil dibuat.');

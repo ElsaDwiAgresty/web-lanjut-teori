@@ -10,6 +10,12 @@ use App\Models\PelangganModel;
 
 class AdminController extends Controller
 {
+    //DASHBOARD
+    public function dashboard()
+    {
+        return view('Admin.dashboardAdmin'); // Pastikan path view sesuai
+    }
+
     // Kelola Menu
     public function indexMenu()
     {
@@ -59,4 +65,64 @@ class AdminController extends Controller
         $menu->delete();
         return redirect()->route('admin.menu.index')->with('success', 'Menu berhasil dihapus.');
     }
+
+    //Kelola Pelanggan
+    public function indexPelanggan()
+    {
+        $pelangganItems = PelangganModel::all(); // Ambil data pelanggan dari database
+        return view('Admin.Pelanggan.kelola-pelanggan', compact('pelangganItems')); // Tampilkan view
+    }
+
+
+    public function editPelanggan($id)
+    {
+        $pelanggan = PelangganModel::findOrFail($id);
+        return view('admin.pelanggan.edit', ['data' => $pelanggan]);
+    }
+
+    public function updatePelanggan(Request $request, $id)
+    {
+        $request->validate([
+            'nama' => 'required|string',
+            'email' => 'required|string',
+            'no_hp' => 'nullable|string',
+        ]);
+
+        $pelanggan = PelangganModel::findOrFail($id);
+        $pelanggan->update($request->all());
+        return redirect()->route('admin.pelanggan.index')->with('success', 'Pelanggan berhasil diupdate.');
+    }
+
+    public function destroyPelanggan($id)
+    {
+        $pelanggan = PelangganModel::findOrFail($id);
+        $pelanggan->delete();
+        return redirect()->route('admin.pelanggan.index')->with('success', 'Pelanggan berhasil dihapus.');
+    }
+
+    //kelola reservasi
+    public function indexReservasi()
+    {
+        $reservasiItems = ReservasiModel::all(); // Ambil data pelanggan dari database
+        return view('Admin.Reservasi.kelola-reservasi', compact('reservasiItems')); // Tampilkan view
+    }
+
+    public function updateStatusReservasi(Request $request, $id_reservasi)
+    {
+        // Validasi input
+        $request->validate([
+            'status' => 'required|in:OK,Dalam Antrian,Ditolak',
+        ]);
+
+        // Cari data reservasi berdasarkan ID
+        $reservasi = ReservasiModel::where('id_reservasi', $id_reservasi)->firstOrFail();
+        $reservasi->status = $request->status; // Ubah status
+        $reservasi->save(); // Simpan perubahan
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('admin.reservasi')
+            ->with('success', 'Status reservasi berhasil diubah.');
+    }
+
+
 }

@@ -10,12 +10,15 @@ class ReservasiModel extends Model
     use HasFactory;
 
     protected $table = 'reservasi';
+    protected $primaryKey = 'id_reservasi';
     protected $guarded = ['id_reservasi'];
     protected $fillable = [
         'id_pelanggan',
         'tipe_reservasi',
         'nomor_meja',
-        'status'
+        'status',
+        'tgl_reservasi',
+        'waktu_reservasi'
     ];
 
     public function pelanggan() {

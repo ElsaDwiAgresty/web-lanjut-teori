@@ -31,6 +31,16 @@ Route::get('menu', [AdminController::class, 'indexMenu'])
 Route::get('menu/create', [AdminController::class, 'createMenu'])
     ->name('admin.menu.create');
 
+//PELANGGAN
+Route::get('pelanggan', [AdminController::class, 'indexPelanggan'])->name('admin.pelanggan.index');
+Route::get('/pelanggan/edit/{id}', [AdminController::class, 'editPelanggan'])
+    ->name('admin.pelanggan.editPelanggan');
+Route::put('/pelanggan/update/{id}', [AdminController::class, 'updatePelanggan'])
+    ->name('admin.pelanggan.updatePelanggan');
+Route::delete('/pelanggan/{id}', [AdminController::class, 'destroyPelanggan'])
+    ->name('admin.pelanggan.destroy');
+
+
 
 // RESERVASI
 Route::get('reservasi', [PelangganController::class, 'indexReservasi'])
@@ -40,8 +50,13 @@ Route::get('reservasi/create', [PelangganController::class, 'reservasi'])
     ->name('pelanggan.reservasi.create');
 Route::post('reservasi', [PelangganController::class, 'storeReservasi'])
     ->name('pelanggan.reservasi.store');
-
 Route::get('/reservasi-saya', [PelangganController::class, 'reservasiSaya'])->name('reservasi.saya');
+
+//RESERVASI ADMIN
+Route::get('reservasi', [AdminController::class, 'indexReservasi'])
+    ->name('admin.reservasi');
+Route::post('/reservasi/{id}/update-status', [AdminController::class, 'updateStatusReservasi'])
+    ->name('admin.reservasi.updateStatus');
 
 
 //REGISTRASI
@@ -73,6 +88,9 @@ Route::get('/', [PelangganController::class, 'indexHome'])
 Route::get('dashboard', [PelangganController::class, 'dashboard'])
     ->name('pelanggan.dashboard')
     ->middleware('authCheck');
+
+//DASHBOARD ADMIN
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
 
 //LOGOUT

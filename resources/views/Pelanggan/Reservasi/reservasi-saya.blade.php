@@ -31,6 +31,8 @@
                     <tr>
                         <th>Tipe Reservasi</th>
                         <th>Nomor Meja</th>
+                        <th>Tanggal Reservasi</th>
+                        <th>Waktu Reservasi</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -39,6 +41,8 @@
                         <tr>
                             <td class="fw-semibold">{{ $item->tipe_reservasi }}</td>
                             <td>{{ $item->nomor_meja }}</td>
+                            <td>{{ $item->tgl_reservasi}}</td>
+                            <td>{{ $item->waktu_reservasi}}</td>
                             <td>
                                 <span class="badge 
                                     @if($item->status == 'OK') bg-success 
