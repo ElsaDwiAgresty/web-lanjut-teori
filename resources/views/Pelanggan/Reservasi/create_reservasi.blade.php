@@ -92,11 +92,11 @@
 
 <div class="container">
     <h1 class="my-4">Form Data Reservasi</h1>
-    <form action="" method="POST">
+    <form action="{{ route('pelanggan.registrasi.store') }}" method="POST">
         @csrf
         <div class="mb-3">
             <label for="tipe_reservasi" class="form-label">Tipe Reservasi</label>
-            <select class="form-control" id="tipe_reservasi" name="tipe_reservasi">
+            <select class="form-control" id="tipe_reservasi" name="tipe_reservasi" required>
                 <option value="">Pilih tipe reservasi</option>
                 <option value="family">Family</option>
                 <option value="vip">VIP</option>
@@ -107,7 +107,7 @@
         </div>
         <div class="mb-3">
             <label for="nomor_meja" class="form-label">Nomor Meja</label>
-            <select class="form-control" id="nomor_meja" name="nomor_meja">
+            <select class="form-control" id="nomor_meja" name="nomor_meja" required>
                 <option value="">Pilih nomor meja</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -124,8 +124,7 @@
 
         <div class="mb-3">
             <label for="tgl_reservasi" class="form-label">Tanggal Reservasi</label>
-            <input type="date" id="tgl_reservasi" name="tgl_reservasi" class="form-control" required
-                min="{{ date('Y-m-d') }}" max="{{ date('Y-m-d') }}">
+            <input type="date" id="tgl_reservasi" name="tgl_reservasi" class="form-control" required min="{{ date('Y-m-d') }}">
         </div>
 
         <div class="mb-3">

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PelangganController;
 
 /*
@@ -17,14 +18,6 @@ use App\Http\Controllers\PelangganController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('create', function(){
-    return view('create');
-});
-
 //MENU
 Route::get('menu', [AdminController::class, 'indexMenu'])
     ->name('admin.menu.index');
@@ -32,7 +25,8 @@ Route::get('menu/create', [AdminController::class, 'createMenu'])
     ->name('admin.menu.create');
 
 //PELANGGAN
-Route::get('pelanggan', [AdminController::class, 'indexPelanggan'])->name('admin.pelanggan.index');
+Route::get('pelanggan', [AdminController::class, 'indexPelanggan'])
+    ->name('admin.pelanggan.index');
 Route::get('/pelanggan/edit/{id}', [AdminController::class, 'editPelanggan'])
     ->name('admin.pelanggan.editPelanggan');
 Route::put('/pelanggan/update/{id}', [AdminController::class, 'updatePelanggan'])
@@ -40,17 +34,15 @@ Route::put('/pelanggan/update/{id}', [AdminController::class, 'updatePelanggan']
 Route::delete('/pelanggan/{id}', [AdminController::class, 'destroyPelanggan'])
     ->name('admin.pelanggan.destroy');
 
-
-
 // RESERVASI
-Route::get('reservasi', [PelangganController::class, 'indexReservasi'])
-    ->name('pelanggan.reservasi')
-    ->middleware('loginCheck');
-Route::get('reservasi/create', [PelangganController::class, 'reservasi'])
-    ->name('pelanggan.reservasi.create');
-Route::post('reservasi', [PelangganController::class, 'storeReservasi'])
-    ->name('pelanggan.reservasi.store');
-Route::get('/reservasi-saya', [PelangganController::class, 'reservasiSaya'])->name('reservasi.saya');
+Route::middleware('pelangganAuthCheck')->group(function() {
+    Route::get('reservasi/create', [PelangganController::class, 'indexReservasi'])
+        ->name('pelanggan.reservasi.create');
+    Route::post('reservasi', [PelangganController::class, 'storeReservasi'])
+        ->name('pelanggan.reservasi.store');
+    Route::get('reservasi-saya', [PelangganController::class, 'reservasiSaya'])
+        ->name('reservasi.saya');
+});
 
 //RESERVASI ADMIN
 Route::get('reservasi', [AdminController::class, 'indexReservasi'])
@@ -58,24 +50,22 @@ Route::get('reservasi', [AdminController::class, 'indexReservasi'])
 Route::post('/reservasi/{id}/update-status', [AdminController::class, 'updateStatusReservasi'])
     ->name('admin.reservasi.updateStatus');
 
-
-//REGISTRASI
-Route::get('registrasi', [PelangganController::class, 'indexRegistrasi'])
-    ->name('pelanggan.registrasi')
-    ->middleware('loginCheck');
-Route::get('registrasi/create', [PelangganController::class, 'registrasi'])
-    ->name('pelanggan.registrasi.create');
-Route::post('registrasi', [PelangganController::class, 'storeRegistrasi'])
-    ->name('pelanggan.registrasi.store');
-
-
-//LOGIN
-Route::get('login', [PelangganController::class, 'indexLogin'])
-    ->name('login')
-    ->middleware('loginCheck');
-Route::post('login', [PelangganController::class, 'login'])
-    ->name('pelanggan.login');
-
+//LOGIN, REGISTRASI, DAN LOGOUT
+Route::middleware('loginCheck')->group(function() {
+    //LOGIN
+    Route::get('login', [LoginController::class, 'indexLogin'])
+        ->name('login');
+    Route::post('login', [LoginController::class, 'login'])
+        ->name('pelanggan.login');
+    //REGISTRASI
+    Route::get('registrasi', [LoginController::class, 'indexRegistrasi'])
+        ->name('pelanggan.registrasi');
+    Route::post('registrasi', [LoginController::class, 'storeRegistrasi'])
+        ->name('pelanggan.registrasi.store');
+    //LOGOUT
+    Route::get('logout', [LoginController::class, 'logout'])
+        ->name('pelanggan.logout');
+});
 
 //HOME
 Route::get('/', [PelangganController::class, 'indexMenu'])
@@ -83,30 +73,26 @@ Route::get('/', [PelangganController::class, 'indexMenu'])
 Route::get('/', [PelangganController::class, 'indexHome'])
     ->name('home');
 
-
-//DASHBOARD
-Route::get('dashboard', [PelangganController::class, 'dashboard'])
-    ->name('pelanggan.dashboard')
-    ->middleware('authCheck');
+//DASHBOARD PELANGGAN
+Route::middleware('pelangganAuthCheck')->group(function() {
+    //DASHBOARD
+    Route::get('dashboard', [PelangganController::class, 'dashboard'])
+        ->name('pelanggan.dashboard');
+    //PROFIL
+    Route::put('/pelanggan/update', [PelangganController::class, 'updateProfil'])
+        ->name('pelanggan.profile');
+    Route::get('/pelanggan/profile', [PelangganController::class, 'profil'])
+        ->name('pelanggan.profil');
+    Route::put('/pelanggan/update', [PelangganController::class, 'updateProfil'])
+        ->name('pelanggan.updateProfil');
+    Route::get('/pelanggan/update', [PelangganController::class, 'updateProfil'])
+        ->name('pelanggan.profile');
+});
 
 //DASHBOARD ADMIN
-Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-
-
-//LOGOUT
-Route::get('logout', [PelangganController::class, 'logout'])
-    ->name('pelanggan.logout');
-
-
-//PROFIL
-Route::put('/pelanggan/update', [PelangganController::class, 'updateProfil'])->name('pelanggan.profile');
-Route::get('/pelanggan/profile', [PelangganController::class, 'profil'])
-    ->name('pelanggan.profil')
-    ->middleware('authCheck');
-Route::put('/pelanggan/update', [PelangganController::class, 'updateProfil'])
-    ->name('pelanggan.updateProfil')
-    ->middleware('authCheck');
-Route::get('/pelanggan/update', [PelangganController::class, 'updateProfil'])->name('pelanggan.profile');
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
+    ->name('admin.dashboard')
+    ->middleware('adminAuthCheck');
 
 Route::get('admin/menu', [AdminController::class, 'indexMenu'])->name('admin.menu.index');
 

@@ -91,7 +91,11 @@
                 <ul class="navbar-nav ml-auto">
                     @if (session('id_pelanggan'))
                         <li class="nav-item">
+                        @if (session('role') == 'pelanggan')
                             <a class="nav-link" href="{{ route('pelanggan.dashboard') }}">
+                        @elseif (session('role') == 'admin')
+                            <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                        @endif
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
                                     <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
                                 </svg>
@@ -126,10 +130,12 @@
                 <p>
                     Untuk reservasi, silakan klik tombol di bawah ini untuk memulai proses reservasi Anda.
                 </p>
-                @if (session('id_pelanggan'))
-                    <a href="{{ route('pelanggan.reservasi') }}" class="btn btn-primary">Buat Reservasi</a>
+                @if (session('id_pelanggan') && session('role') == 'pelanggan')
+                    <a href="{{ route('pelanggan.reservasi.create') }}" class="btn btn-primary">Buat Reservasi</a>
+                @elseif (session('id_pelanggan') && session('role') == 'admin')
+                    <a href="" class="btn btn-primary" onclick="alert('Silakan login sebagai pelanggan.')">Buat Reservasi</a>
                 @else
-                    <a href="{{ route('login') }}" class="btn btn-primary" onclick="alert('Anda harus login terlebih dahulu untuk melakukan reservasi.')">Buat Reservasi</a>
+                    <a href="{{ route('login') }}" class="btn btn-primary" onclick="alert('Anda harus login/registrasi sebagai pelanggan terlebih dahulu untuk melakukan reservasi.')">Buat Reservasi</a>
                 @endif
             </div>
             <div class="col-md-6">

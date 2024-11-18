@@ -49,6 +49,8 @@
 </style>
 
 <div class="container py-5">
+    <a href="{{ route('home') }}">< Kembali ke Home</a>
+
     <div class="text-center mb-5">
         <h1>Selamat Datang, Admin!</h1>
         <p class="text-muted">Kelola semua data dan aktivitas dengan mudah di dashboard admin.</p>
@@ -92,10 +94,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="text-center mt-5">
-        <a href="{{ route('home') }}" class="btn btn-outline-dark">Kembali ke Halaman Utama</a>
     </div>
 </div>
 @endsection

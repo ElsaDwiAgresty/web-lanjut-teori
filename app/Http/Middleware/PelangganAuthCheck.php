@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthCheck
+class PelangganAuthCheck
 {
     /**
      * Handle an incoming request.
@@ -17,6 +17,9 @@ class AuthCheck
     {
         if(!Session()->has('id_pelanggan')){
             return redirect('login')->with('fail','You have to login first.');
+        }
+        if(Session()->get('role') !== 'pelanggan'){
+            return back();
         }
         return $next($request);
     }
