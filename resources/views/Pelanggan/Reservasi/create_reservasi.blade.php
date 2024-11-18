@@ -92,7 +92,7 @@
 
 <div class="container">
     <h1 class="my-4">Form Data Reservasi</h1>
-    <form action="{{ route('pelanggan.registrasi.store') }}" method="POST">
+    <form action="{{ route('pelanggan.reservasi.store') }}" method="POST">
         @csrf
         <div class="mb-3">
             <label for="tipe_reservasi" class="form-label">Tipe Reservasi</label>

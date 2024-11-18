@@ -51,7 +51,7 @@ class PelangganController extends Controller
             'tgl_reservasi' => 'required',
             'waktu_reservasi' => 'required'
         ]);
-
+        
         // Simpan data reservasi ke dalam tabel
         $this->reservasiModel->create([
             'id_pelanggan' => session('id_pelanggan'),  
