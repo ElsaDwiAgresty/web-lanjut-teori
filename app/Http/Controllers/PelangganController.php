@@ -28,16 +28,11 @@ class PelangganController extends Controller
     public function indexReservasi()
     {
         $menuItems = $this->menuModel->getMenu();
-        return view('Pelanggan/Reservasi/create_reservasi', compact('menuItems'));
+        return view('Pelanggan.Reservasi.create_reservasi', compact('menuItems'));
     }
 
     public function reservasiSaya()
     {
-        // Cek apakah user sudah login
-        if (!session()->has('id_pelanggan')) {
-            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
-        }
-
         // Ambil data reservasi berdasarkan id pelanggan yang sedang login
         $reservasi = ReservasiModel::where('id_pelanggan', session('id_pelanggan'))->get();
 
@@ -49,11 +44,6 @@ class PelangganController extends Controller
     // Menyimpan data reservasi
     public function storeReservasi(Request $request)
     {
-        // Cek apakah user sudah login
-        if (!session()->has('id_pelanggan')) {
-            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
-        }
-
         // Validasi input
         $request->validate([
             'tipe_reservasi' => 'required',
@@ -63,7 +53,7 @@ class PelangganController extends Controller
         ]);
 
         // Simpan data reservasi ke dalam tabel
-        ReservasiModel::create([
+        $this->reservasiModel->create([
             'id_pelanggan' => session('id_pelanggan'),  
             'tipe_reservasi' => $request->input('tipe_reservasi'),
             'nomor_meja' => $request->input('nomor_meja'),

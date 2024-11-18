@@ -34,21 +34,17 @@ Route::put('/pelanggan/update/{id}', [AdminController::class, 'updatePelanggan']
 Route::delete('/pelanggan/{id}', [AdminController::class, 'destroyPelanggan'])
     ->name('admin.pelanggan.destroy');
 
-// RESERVASI
-Route::middleware('pelangganAuthCheck')->group(function() {
-    Route::get('reservasi/create', [PelangganController::class, 'indexReservasi'])
-        ->name('pelanggan.reservasi.create');
-    Route::post('reservasi', [PelangganController::class, 'storeReservasi'])
-        ->name('pelanggan.reservasi.store');
-    Route::get('reservasi-saya', [PelangganController::class, 'reservasiSaya'])
-        ->name('reservasi.saya');
-});
-
 //RESERVASI ADMIN
 Route::get('reservasi', [AdminController::class, 'indexReservasi'])
     ->name('admin.reservasi');
 Route::post('/reservasi/{id}/update-status', [AdminController::class, 'updateStatusReservasi'])
     ->name('admin.reservasi.updateStatus');
+
+//HOME
+Route::get('/', [PelangganController::class, 'indexMenu'])
+    ->name('home');
+Route::get('/', [PelangganController::class, 'indexHome'])
+    ->name('home');
 
 //LOGIN, REGISTRASI, DAN LOGOUT
 Route::middleware('loginCheck')->group(function() {
@@ -67,26 +63,23 @@ Route::middleware('loginCheck')->group(function() {
         ->name('pelanggan.logout');
 });
 
-//HOME
-Route::get('/', [PelangganController::class, 'indexMenu'])
-    ->name('home');
-Route::get('/', [PelangganController::class, 'indexHome'])
-    ->name('home');
-
 //DASHBOARD PELANGGAN
 Route::middleware('pelangganAuthCheck')->group(function() {
     //DASHBOARD
     Route::get('dashboard', [PelangganController::class, 'dashboard'])
         ->name('pelanggan.dashboard');
     //PROFIL
-    Route::put('/pelanggan/update', [PelangganController::class, 'updateProfil'])
-        ->name('pelanggan.profile');
-    Route::get('/pelanggan/profile', [PelangganController::class, 'profil'])
+    Route::get('dashboard/profile', [PelangganController::class, 'profil'])
         ->name('pelanggan.profil');
-    Route::put('/pelanggan/update', [PelangganController::class, 'updateProfil'])
+    Route::put('dashboard/profile/update', [PelangganController::class, 'updateProfil'])
         ->name('pelanggan.updateProfil');
-    Route::get('/pelanggan/update', [PelangganController::class, 'updateProfil'])
-        ->name('pelanggan.profile');
+    //RESERVASI
+    Route::get('reservasi/create', [PelangganController::class, 'indexReservasi'])
+        ->name('pelanggan.reservasi.create');
+    Route::post('reservasi/store', [PelangganController::class, 'storeReservasi'])
+        ->name('pelanggan.reservasi.store');
+    Route::get('dashboard/reservasi-saya', [PelangganController::class, 'reservasiSaya'])
+        ->name('reservasi.saya');
 });
 
 //DASHBOARD ADMIN
@@ -95,4 +88,3 @@ Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
     ->middleware('adminAuthCheck');
 
 Route::get('admin/menu', [AdminController::class, 'indexMenu'])->name('admin.menu.index');
-

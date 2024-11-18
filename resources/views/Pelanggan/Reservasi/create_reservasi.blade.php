@@ -98,11 +98,11 @@
             <label for="tipe_reservasi" class="form-label">Tipe Reservasi</label>
             <select class="form-control" id="tipe_reservasi" name="tipe_reservasi" required>
                 <option value="">Pilih tipe reservasi</option>
-                <option value="family">Family</option>
-                <option value="vip">VIP</option>
-                <option value="couple">Couple</option>
-                <option value="business">Business</option>
-                <option value="group">Group</option>
+                <option value="Family">Family</option>
+                <option value="VIP">VIP</option>
+                <option value="Couple">Couple</option>
+                <option value="Business">Business</option>
+                <option value="Group">Group</option>
             </select>
         </div>
         <div class="mb-3">
