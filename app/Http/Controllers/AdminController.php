@@ -74,13 +74,13 @@ class AdminController extends Controller
     }
 
 
-    public function editPelanggan($id)
-    {
-        $pelanggan = PelangganModel::findOrFail($id);
-        return view('admin.pelanggan.edit', ['data' => $pelanggan]);
-    }
+    public function editPelanggan($id_pelanggan)
+{
+    $pelanggan = PelangganModel::findOrFail($id_pelanggan);
+    return view('Admin.Pelanggan.edit-pelanggan', compact('pelanggan')); // Pastikan nama view sesuai
+}
 
-    public function updatePelanggan(Request $request, $id)
+    public function updatePelanggan(Request $request, $id_pelanggan)
     {
         $request->validate([
             'nama' => 'required|string',
@@ -88,14 +88,14 @@ class AdminController extends Controller
             'no_hp' => 'nullable|string',
         ]);
 
-        $pelanggan = PelangganModel::findOrFail($id);
+        $pelanggan = PelangganModel::findOrFail($id_pelanggan);
         $pelanggan->update($request->all());
         return redirect()->route('admin.pelanggan.index')->with('success', 'Pelanggan berhasil diupdate.');
     }
 
-    public function destroyPelanggan($id)
+    public function destroyPelanggan($id_pelanggan)
     {
-        $pelanggan = PelangganModel::findOrFail($id);
+        $pelanggan = PelangganModel::findOrFail($id_pelanggan);
         $pelanggan->delete();
         return redirect()->route('admin.pelanggan.index')->with('success', 'Pelanggan berhasil dihapus.');
     }

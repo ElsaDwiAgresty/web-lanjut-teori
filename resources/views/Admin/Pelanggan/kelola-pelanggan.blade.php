@@ -78,11 +78,13 @@
                     <td>{{ $pelanggan->email }}</td>
                     <td>{{ $pelanggan->no_hp }}</td>
                     <td>
-                        <a href="" class="btn btn-warning btn-sm">
+                        <a href="{{ $pelanggan->id_pelanggan ? route('admin.pelanggan.editPelanggan', ['id' => $pelanggan->id_pelanggan]) : '#' }}" class="btn btn-warning btn-sm" 
+                            {{ !$pelanggan->id_pelanggan ? 'disabled' : '' }}>
                             <i class="fa fa-edit"></i> Edit
                         </a>
 
-                        <form action="" method="POST" class="d-inline">
+
+                        <form action="{{ route('admin.pelanggan.destroy', $pelanggan->id_pelanggan) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Anda yakin ingin menghapus pelanggan ini?');">
@@ -94,6 +96,10 @@
                 @endforeach
             </tbody>
         </table>
+
+        <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">Kembali</a>
+        </div>
     </div>
 </div>
 @endsection

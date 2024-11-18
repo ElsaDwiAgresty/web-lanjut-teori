@@ -29,20 +29,20 @@
                     <h3>Edit Pelanggan</h3>
                 </div>
                 <div class="card-body">
-                <form action="{{ route('admin.pelanggan.updatePelanggan', $data->id) }}" method="POST">
+                <form action="{{ route('admin.pelanggan.updatePelanggan', $pelanggan->id_pelanggan) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="form-group">
                         <label for="nama">Nama:</label>
-                        <input type="text" name="nama" id="nama" class="form-control" value="{{ $data->nama }}" required>
+                        <input type="text" name="nama" id="nama" class="form-control" value="{{ $pelanggan->nama }}" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" name="email" id="email" class="form-control" value="{{ $data->email }}" required>
+                        <input type="email" name="email" id="email" class="form-control" value="{{ $pelanggan->email }}" required>
                     </div>
                     <div class="form-group">
                         <label for="no_hp">No HP:</label>
-                        <input type="text" name="no_hp" id="no_hp" class="form-control" value="{{ $data->no_hp }}" required>
+                        <input type="text" name="no_hp" id="no_hp" class="form-control" value="{{ $pelanggan->no_hp }}" required>
                     </div>
                     <button type="submit" class="btn btn-success">Update</button>
                     <a href="{{ route('admin.pelanggan.index') }}" class="btn btn-secondary">Kembali</a>
