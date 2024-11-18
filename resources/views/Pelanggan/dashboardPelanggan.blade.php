@@ -49,6 +49,8 @@
 </style>
 
 <div class="container py-5">
+    <a href="{{ route('home') }}">< Kembali ke Home</a>
+
     <div class="text-center mb-5">
         <h1>Halo, {{ $data['nama'] }}!</h1>
         <p class="text-muted">Selamat datang di dashboard pelanggan.</p>
@@ -82,9 +84,6 @@
                     <a href="" class="btn btn-primary">Lihat Riwayat</a>
                 </div>
             </div>
-        </div>
-        <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
-            <a href="{{ route('home') }}" class="btn btn-primary">Home</a>
         </div>
     </div>
 </div>

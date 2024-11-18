@@ -21,7 +21,7 @@
             <div class="col-md-6">
                 <div class="card shadow-sm mt-5">
                     <div class="card-header text-white text-center" style="background-color: #2F4F4F;">
-                        <h3>Login Pelanggan</h3>
+                        <h3>Login</h3>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('login') }}" method="POST">
