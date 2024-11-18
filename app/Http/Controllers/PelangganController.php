@@ -48,8 +48,8 @@ class PelangganController extends Controller
         $request->validate([
             'tipe_reservasi' => 'required',
             'nomor_meja' => 'required',
-            'tgl_reservasi' => 'required',
-            'waktu_reservasi' => 'required'
+            'tgl_reservasi' => 'required|date|after_or_equal:today|before_or_equal:'.date('Y-m-d', strtotime('+3 days')),
+            'waktu_reservasi' => 'required|in:13:00,14:30,17:00,18:00,20:00,20:30',
         ]);
         
         // Simpan data reservasi ke dalam tabel

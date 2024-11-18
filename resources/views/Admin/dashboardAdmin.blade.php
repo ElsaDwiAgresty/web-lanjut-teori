@@ -81,7 +81,7 @@
                 <div class="card-body text-center">
                     <h5 class="card-title fw-bold">Reservasi</h5>
                     <p class="card-text">Pantau dan atur reservasi pelanggan.</p>
-                    <a href="{{ route('admin.reservasi') }}" class="btn btn-primary">Kelola Reservasi</a>
+                    <a href="{{ route('admin.reservasi.index') }}" class="btn btn-primary">Kelola Reservasi</a>
                 </div>
             </div>
         </div>

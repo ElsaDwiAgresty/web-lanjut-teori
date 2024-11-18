@@ -94,11 +94,11 @@
                             <button type="submit" class="btn btn-success btn-sm">Update</button>
                         </form>
                     
-                        <a href="" class="btn btn-warning btn-sm">
+                        <a href="{{ route('admin.reservasi.editReservasi', $reservasi->id_reservasi) }}" class="btn btn-warning btn-sm">
                             <i class="fa fa-edit"></i> Edit
                         </a>
 
-                        <form action="" method="POST" class="d-inline">
+                        <form action="{{ route('admin.reservasi.destroy', $reservasi->id_reservasi) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Anda yakin ingin menghapus pelanggan ini?');">
@@ -110,6 +110,10 @@
                 @endforeach
             </tbody>
         </table>
+
+        <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">Kembali</a>
+        </div>
     </div>
 </div>
 @endsection
