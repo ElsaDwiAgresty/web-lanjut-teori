@@ -124,13 +124,29 @@
 
         <div class="mb-3">
             <label for="tgl_reservasi" class="form-label">Tanggal Reservasi</label>
-            <input type="date" id="tgl_reservasi" name="tgl_reservasi" class="form-control" required min="{{ date('Y-m-d') }}">
+            <input 
+                type="date" 
+                id="tgl_reservasi" 
+                name="tgl_reservasi" 
+                class="form-control" 
+                required 
+                min="{{ date('Y-m-d') }}" 
+                max="{{ date('Y-m-d', strtotime('+3 days')) }}">
         </div>
 
         <div class="mb-3">
             <label for="waktu_reservasi" class="form-label">Waktu Reservasi</label>
-            <input type="time" id="waktu_reservasi" name="waktu_reservasi" class="form-control" required>
+            <select id="waktu_reservasi" name="waktu_reservasi" class="form-control" required>
+                <option value="pilih waktu reservasi">Pilih Waktu Reservasi</option>
+                <option value="13:00">13:00</option>
+                <option value="14:30">14:30</option>
+                <option value="17:00">17:00</option>
+                <option value="18:00">18:00</option>
+                <option value="20:00">20:00</option>
+                <option value="20:30">20:30</option>
+            </select>
         </div>
+
 
         <!-- <div class="container my-4">
             <h3>Pilih Menu</h3>

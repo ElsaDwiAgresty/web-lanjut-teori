@@ -36,9 +36,15 @@ Route::delete('/pelanggan/{id}', [AdminController::class, 'destroyPelanggan'])
 
 //RESERVASI ADMIN
 Route::get('reservasi', [AdminController::class, 'indexReservasi'])
-    ->name('admin.reservasi');
+    ->name('admin.reservasi.index');
 Route::post('/reservasi/{id}/update-status', [AdminController::class, 'updateStatusReservasi'])
     ->name('admin.reservasi.updateStatus');
+Route::get('/reservasi/edit/{id}', [AdminController::class, 'editReservasi'])
+    ->name('admin.reservasi.editReservasi');
+Route::put('/reservasi/update/{id}', [AdminController::class, 'updateReservasi'])
+    ->name('admin.reservasi.updateReservasi');
+Route::delete('/reservasi/{id}', [AdminController::class, 'destroyReservasi'])
+    ->name('admin.reservasi.destroy');
 
 //HOME
 Route::get('/', [PelangganController::class, 'indexMenu'])

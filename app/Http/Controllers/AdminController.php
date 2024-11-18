@@ -120,9 +120,36 @@ class AdminController extends Controller
         $reservasi->save(); // Simpan perubahan
 
         // Redirect dengan pesan sukses
-        return redirect()->route('admin.reservasi')
+        return redirect()->route('admin.reservasi.index')
             ->with('success', 'Status reservasi berhasil diubah.');
     }
 
+    public function editReservasi($id_reservasi)
+{
+    $reservasi = ReservasiModel::findOrFail($id_reservasi);
+    return view('Admin.reservasi.edit-reservasi', compact('reservasi')); // Pastikan nama view sesuai
+}
+
+    public function updateReservasi(Request $request, $id_reservasi)
+    {
+        $request->validate([
+            'id_pelanggan' => 'required|numeric',
+            'tipe_reservasi' => 'required|string',
+            'nomor_meja' => 'required|numeric',
+            'tgl_reservasi' => 'required|date',
+            'waktu_reservasi' => 'required|time',
+        ]);
+
+        $reservasi = ReservasiModel::findOrFail($id_reservasi);
+        $reservasi->update($request->all());
+        return redirect()->route('admin.reservasi.index')->with('success', 'Reservasi berhasil diupdate.');
+    }
+
+    public function destroyReservasi($id_reservasi)
+    {
+        $reservasi = ReservasiModel::findOrFail($id_reservasi);
+        $reservasi->delete();
+        return redirect()->route('admin.reservasi.index')->with('success', 'reservasi berhasil dihapus.');
+    }
 
 }
