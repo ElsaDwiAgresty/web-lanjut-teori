@@ -29,36 +29,37 @@
                     <h3>Profil Pelanggan</h3>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('pelanggan.updateProfil') }}" method="POST">
-                        @csrf
-                        @method('PUT')
+                <form action="{{ route('pelanggan.updateProfil') }}" method="POST">
+                    @csrf
+                    @method('PUT')
 
-                        <div class="mb-3">
-                            <label for="nama" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="nama" name="nama" value="{{ $data['nama'] }}" required>
-                        </div>
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Nama</label>
+                        <input type="text" class="form-control" id="nama" name="nama" value="{{ $data['nama'] }}" required>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="no_hp" class="form-label">Nomor HP</label>
-                            <input type="text" class="form-control" id="no_hp" name="no_hp" value="{{ $data['no_hp'] }}" required>
-                        </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ $data['email'] }}" required>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{ $data['email'] }}" required>
-                        </div>
+                    <div class="mb-3">
+                        <label for="no_hp" class="form-label">Nomor HP</label>
+                        <input type="text" class="form-control" id="no_hp" name="no_hp" value="{{ $data['no_hp'] }}" required>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password baru (opsional)">
-                            <small class="text-muted">Kosongkan jika tidak ingin mengubah password.</small>
-                        </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password baru (opsional)">
+                        <small class="text-muted">Kosongkan jika tidak ingin mengubah password.</small>
+                    </div>
 
-                        <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                            <a href="{{ route('pelanggan.dashboard') }}" class="btn btn-secondary">Batal</a>
-                        </div>
-                    </form>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        <a href="{{ route('pelanggan.dashboard') }}" class="btn btn-secondary">Batal</a>
+                    </div>
+                </form>
+
                 </div>
             </div>
         </div>

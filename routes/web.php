@@ -88,7 +88,7 @@ Route::get('/pelanggan/profile', [PelangganController::class, 'profil'])
 Route::put('/pelanggan/update', [PelangganController::class, 'updateProfil'])
     ->name('pelanggan.updateProfil')
     ->middleware('authCheck');
-// Route::get('/pelanggan/update', [PelangganController::class, 'updateProfil'])->name('pelanggan.profile');
+Route::get('/pelanggan/update', [PelangganController::class, 'updateProfil'])->name('pelanggan.profile');
 
 Route::get('admin/menu', [AdminController::class, 'indexMenu'])->name('admin.menu.index');
 

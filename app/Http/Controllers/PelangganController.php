@@ -172,28 +172,48 @@ class PelangganController extends Controller
     }
 
     //PROFIL
+
+    public function profil()
+    {
+        $data = array();
+        if($id = Session::get('id_pelanggan')){
+            $data = $this->pelangganModel->getPelanggan($id);
+        }
+        return view('Pelanggan.profile', compact('data'));
+    }
+
     public function updateProfil(Request $request)
     {
         $request->validate([
             'nama' => 'required|string|max:255',
-            'nohp' => 'required|string|max:15',
-            'email' => 'required|email',
-            'password' => 'nullable|min:6',
+            'no_hp' => 'required|string|max:15',
+            'email' => 'required|email|unique:pelanggan,email,' . session('id_pelanggan') . ',id_pelanggan', // Validasi email unik dengan pengecualian email pelanggan saat ini
+            'password' => 'nullable|string|min:6',
         ]);
 
-        $user = auth()->user();
-        $user->nama = $request->nama;
-        $user->nohp = $request->nohp;
-        $user->email = $request->email;
+        // Ambil data pelanggan berdasarkan sesi login
+        $pelanggan = PelangganModel::find(session('id_pelanggan'));
 
-        if ($request->password) {
-            $user->password = bcrypt($request->password);
+        if (!$pelanggan) {
+            return redirect()->route('pelanggan.profil')->withErrors('Pelanggan tidak ditemukan.');
         }
 
-        $user->save();
+        // Update data pelanggan
+        $pelanggan->nama = $request->input('nama');
+        $pelanggan->no_hp = $request->input('no_hp');
+        $pelanggan->email = $request->input('email');
+
+        // Update password hanya jika diisi
+        if ($request->filled('password')) {
+            $pelanggan->password = Hash::make($request->input('password'));
+        }
+
+        // Simpan perubahan
+        $pelanggan->save();
 
         return redirect()->route('pelanggan.dashboard')->with('success', 'Profil berhasil diperbarui.');
     }
+
 
     //PESANAN
     public function storePesanan(Request $request)

@@ -70,7 +70,7 @@
                 <div class="card-body text-center">
                     <h5 class="card-title fw-bold">Profil</h5>
                     <p class="card-text">Lihat dan edit informasi profil Anda.</p>
-                    <a href="{{ route('pelanggan.profile') }}" class="btn btn-primary">Profil Saya</a>
+                    <a href="{{ route('pelanggan.profil') }}" class="btn btn-primary">Profil Saya</a>
                 </div>
             </div>
         </div>
