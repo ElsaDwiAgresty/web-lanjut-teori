@@ -48,7 +48,7 @@
     }
 </style>
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Kelola Menu</h2>
+    <h2 class="text-center mb-4">Kelola pelanggan</h2>
 
     <!-- Tampilkan pesan sukses -->
     @if(session('success'))
@@ -57,47 +57,37 @@
         </div>
     @endif
 
-    <!-- Tombol Tambah Menu Baru -->
-    <div class="text-right mb-4">
-        <a href="{{ route('admin.menu.create') }}" class="btn btn-primary">
-            <i class="fa fa-plus-circle"></i> Tambah Menu Baru
-        </a>
-    </div>
-
-    <!-- Tabel Daftar Menu -->
+    <!-- Tabel Daftar pelanggan -->
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
             <thead class="thead-dark">
                 <tr>
                     <th>No</th>
-                    <th>Foto Menu</th>
-                    <th>Nama Menu</th>
-                    <th>Harga</th>
+                    <th>Nama</th>
+                    <th>Email</th>
+                    <th>No HP</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($menuItems as $menu)
+                @foreach($pelangganItems as $pelanggan)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <!-- Menampilkan Foto -->
+                    <td>{{ $pelanggan->nama }}</td>
+                    <td>{{ $pelanggan->email }}</td>
+                    <td>{{ $pelanggan->no_hp }}</td>
                     <td>
-                        @if($menu->foto_menu)
-                            <img src="{{ asset($menu->foto_menu) }}" alt="Foto Menu" class="img-thumbnail" width="100">
-                        @else
-                            <span>No Image</span>
-                        @endif
-                    </td>
-                    <td>{{ $menu->nama_menu }}</td>
-                    <td>Rp {{ number_format($menu->harga_menu, 0, ',', '.') }}</td>
-                    <td>
-                        <a href="{{ route('menu.edit', $menu->id_menu) }}" class="btn btn-warning btn-sm">
+                        <a href="{{ $pelanggan->id_pelanggan ? route('admin.pelanggan.editPelanggan', ['id' => $pelanggan->id_pelanggan]) : '#' }}" class="btn btn-warning btn-sm" 
+                            {{ !$pelanggan->id_pelanggan ? 'disabled' : '' }}>
                             <i class="fa fa-edit"></i> Edit
                         </a>
-                        <form action="{{ route('menu.delete', $menu->id_menu) }}" method="POST" class="d-inline">
+
+
+                        <form action="{{ route('admin.pelanggan.destroy', $pelanggan->id_pelanggan) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Anda yakin ingin menghapus menu ini?');">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Anda yakin ingin menghapus pelanggan ini?');">
                                 <i class="fa fa-trash"></i> Hapus
                             </button>
                         </form>
@@ -106,11 +96,10 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
-    
-    <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
-        <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">Kembali</a>
-    </div>
 
+        <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">Kembali</a>
+        </div>
+    </div>
 </div>
 @endsection

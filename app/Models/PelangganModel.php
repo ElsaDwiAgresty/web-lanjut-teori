@@ -14,13 +14,14 @@ class PelangganModel extends Model implements AuthenticatableContract
     use Authenticatable;
 
     protected $table = 'pelanggan';
-
+    protected $primaryKey = 'id_pelanggan';
     protected $guarded = ['id_pelanggan'];
     protected $fillable = [
         'nama',
         'email',
         'no_hp',
-        'password'
+        'password',
+        'role'
     ];
     protected $hidden = [
         'password'

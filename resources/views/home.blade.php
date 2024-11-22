@@ -17,32 +17,37 @@
         }
 
         /* Styling untuk kartu menu */
-        .menu-card {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
+        /* Styling untuk kartu menu */
+.menu-card {
+    width: 200px; /* Sesuaikan ukuran card */
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: auto;
+    padding: 10px;
+}
 
-        .menu-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        }
+.menu-card img {
+    height: 120px;
+    object-fit: cover;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
 
-        .menu-card img {
-            height: 200px;
-            object-fit: cover;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
+.menu-card .card-body {
+    padding: 10px;
+    text-align: center;
+}
 
-        .menu-card .card-body {
-            padding: 15px;
-            text-align: center;
-        }
+.menu-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
 
         /* Button styling */
         .btn-primary {
@@ -91,7 +96,11 @@
                 <ul class="navbar-nav ml-auto">
                     @if (session('id_pelanggan'))
                         <li class="nav-item">
+                        @if (session('role') == 'pelanggan')
                             <a class="nav-link" href="{{ route('pelanggan.dashboard') }}">
+                        @elseif (session('role') == 'admin')
+                            <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                        @endif
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
                                     <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
                                 </svg>
@@ -126,10 +135,12 @@
                 <p>
                     Untuk reservasi, silakan klik tombol di bawah ini untuk memulai proses reservasi Anda.
                 </p>
-                @if (session('id_pelanggan'))
-                    <a href="{{ route('pelanggan.reservasi') }}" class="btn btn-primary">Buat Reservasi</a>
+                @if (session('id_pelanggan') && session('role') == 'pelanggan')
+                    <a href="{{ route('pelanggan.reservasi.create') }}" class="btn btn-primary">Buat Reservasi</a>
+                @elseif (session('id_pelanggan') && session('role') == 'admin')
+                    <a href="" class="btn btn-primary" onclick="alert('Silakan login sebagai pelanggan.')">Buat Reservasi</a>
                 @else
-                    <a href="{{ route('login') }}" class="btn btn-primary" onclick="alert('Anda harus login terlebih dahulu untuk melakukan reservasi.')">Buat Reservasi</a>
+                    <a href="{{ route('login') }}" class="btn btn-primary" onclick="alert('Anda harus login/registrasi sebagai pelanggan terlebih dahulu untuk melakukan reservasi.')">Buat Reservasi</a>
                 @endif
             </div>
             <div class="col-md-6">
@@ -141,7 +152,7 @@
             <h3>Menu Spesial Hari Ini</h3>
             <div class="row">
                 @foreach ($menuItems as $item)
-                    <div class="col-md-4 mb-4">
+                    <div class="col-6 col-md-4 col-lg-3 mb-4 text-center">
                         <div class="card menu-card">
                             <img src="{{ asset($item->foto_menu) }}" class="card-img-top" alt="{{ $item->nama_menu }}">
                             <div class="card-body">
@@ -152,6 +163,7 @@
                     </div>
                 @endforeach
             </div>
+
         </div>
     </div>
 @endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PelangganModel;
+use App\Models\PesananModel;
 use App\Models\MenuModel;
 use App\Models\ReservasiModel;
 use Illuminate\Support\Facades\Hash;
@@ -27,16 +28,11 @@ class PelangganController extends Controller
     public function indexReservasi()
     {
         $menuItems = $this->menuModel->getMenu();
-        return view('Pelanggan/Reservasi/create_reservasi', compact('menuItems'));
+        return view('Pelanggan.Reservasi.create_reservasi', compact('menuItems'));
     }
 
     public function reservasiSaya()
     {
-        // Cek apakah user sudah login
-        if (!session()->has('id_pelanggan')) {
-            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
-        }
-
         // Ambil data reservasi berdasarkan id pelanggan yang sedang login
         $reservasi = ReservasiModel::where('id_pelanggan', session('id_pelanggan'))->get();
 
@@ -48,86 +44,25 @@ class PelangganController extends Controller
     // Menyimpan data reservasi
     public function storeReservasi(Request $request)
     {
-        // Cek apakah user sudah login
-        if (!session()->has('id_pelanggan')) {
-            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
-        }
-
         // Validasi input
         $request->validate([
             'tipe_reservasi' => 'required',
             'nomor_meja' => 'required',
+            'tgl_reservasi' => 'required|date|after_or_equal:today|before_or_equal:'.date('Y-m-d', strtotime('+3 days')),
+            'waktu_reservasi' => 'required|in:13:00,14:30,17:00,18:00,20:00,20:30',
         ]);
-
+        
         // Simpan data reservasi ke dalam tabel
-        ReservasiModel::create([
+        $this->reservasiModel->create([
             'id_pelanggan' => session('id_pelanggan'),  
             'tipe_reservasi' => $request->input('tipe_reservasi'),
             'nomor_meja' => $request->input('nomor_meja'),
             'status' => 'Dalam Antrian',  
+            'tgl_reservasi' => $request->input('tgl_reservasi'),
+            'waktu_reservasi' => $request->input('waktu_reservasi')
         ]);
 
         return redirect()->route('pelanggan.dashboard')->with('success', 'Reservasi berhasil dibuat.');
-    }
-
-    //REGISTRASI
-    public function indexRegistrasi()
-    {
-        return view('registrasi');
-    }
-
-    public function storeRegistrasi(Request $request)
-    {
-        // Validasi data yang diterima dari form
-        $validated = $request->validate([
-            'nama' => 'required|string|max:255|min:3',
-            'no_hp' => 'required|string|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|max:15',
-            'email' => 'required|string|max:255|unique:pelanggan,email',
-            'password' => 'required|string|min:8|max:255',
-        ]);
-
-        // Buat objek registrasi baru
-        $this->pelangganModel->nama = $validated['nama'];
-        $this->pelangganModel->no_hp = $validated['no_hp'];
-        $this->pelangganModel->email = $validated['email'];
-        $this->pelangganModel->password = Hash::make($validated['password']);;
-        
-        // Simpan ke database
-        $this->pelangganModel->save();
-
-        // Redirect kembali ke halaman form dengan pesan sukses
-        return redirect()->route('pelanggan.login')->with('success', 'Registrasi berhasil, silahkan login.');
-    }
-
-    //LOGIN
-    public function indexLogin()
-    {
-        return view('login');
-    }
-
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
-
-        // Cari pengguna berdasarkan email
-        $user = PelangganModel::where('email', $credentials['email'])->first();
-
-        // Jika pengguna ditemukan dan password sesuai
-        if ($user && Hash::check($credentials['password'], $user->password)) {
-            // Simpan data pengguna ke sesi sebagai autentikasi manual
-            $request->session()->put('id_pelanggan', $user->id_pelanggan);
-
-            // dd(Auth::check()); // Tambahkan ini untuk memeriksa status login
-            
-            // Redirect ke halaman dashboard 
-            return redirect()->route('pelanggan.dashboard')->with('success', 'Anda berhasil login!');
-        }
-
-        // Jika login gagal
-        return back()->withErrors(['login' => 'Email atau password salah.']);
     }
 
     //DASHBOARD
@@ -161,16 +96,8 @@ class PelangganController extends Controller
         return view('home', compact('menuItems', ['user']));
     }
 
-    //LOGOUT
-    public function logout()
-    {
-        if(Session::has('id_pelanggan')){
-            Session::pull('id_pelanggan');
-            return redirect()->route('home');
-        }
-    }
-
     //PROFIL
+
     public function profil()
     {
         $data = array();
@@ -184,27 +111,71 @@ class PelangganController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255',
-            'nohp' => 'required|string|max:15',
-            'email' => 'required|email',
-            'password' => 'nullable|min:6',
+            'no_hp' => 'required|string|max:15',
+            'email' => 'required|email|unique:pelanggan,email,' . session('id_pelanggan') . ',id_pelanggan', // Validasi email unik dengan pengecualian email pelanggan saat ini
+            'password' => 'nullable|string|min:6',
         ]);
 
-        $user = array();
-        if($id = Session::get('id_pelanggan')){
-            $user = $this->pelangganModel->getPelanggan($id);
+        // Ambil data pelanggan berdasarkan sesi login
+        $pelanggan = PelangganModel::find(session('id_pelanggan'));
+
+        if (!$pelanggan) {
+            return redirect()->route('pelanggan.profil')->withErrors('Pelanggan tidak ditemukan.');
         }
 
-        $user->nama = $request->nama;
-        $user->no_hp = $request->no_hp;
-        $user->email = $request->email;
+        // Update data pelanggan
+        $pelanggan->nama = $request->input('nama');
+        $pelanggan->no_hp = $request->input('no_hp');
+        $pelanggan->email = $request->input('email');
 
-        if ($request->password) {
-            $user->password = bcrypt($request->password);
+        // Update password hanya jika diisi
+        if ($request->filled('password')) {
+            $pelanggan->password = Hash::make($request->input('password'));
         }
 
-        $user->save();
+        // Simpan perubahan
+        $pelanggan->save();
 
         return redirect()->route('pelanggan.dashboard')->with('success', 'Profil berhasil diperbarui.');
     }
+
+
+    //PESANAN
+    public function storePesanan(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'id_reservasi' => 'required|exists:reservasi,id', // Pastikan id_reservasi ada di tabel reservasi
+            'menu' => 'required|array', // Asumsikan menu adalah array dari id_menu yang dipilih
+            'menu.*.jumlah' => 'required|integer|min:1',
+            'menu.*.harga' => 'required|numeric|min:0',
+        ]);
+
+        // Ambil id_pelanggan dari sesi login
+        $id_pelanggan = session('id_pelanggan');
+        
+        // Pastikan id_reservasi berelasi dengan id_pelanggan yang sedang login
+        $reservasi = ReservasiModel::where('id', $request->input('id_reservasi'))
+                                ->where('id_pelanggan', $id_pelanggan)
+                                ->first();
+
+        if (!$reservasi) {
+            return redirect()->back()->withErrors('Reservasi tidak ditemukan atau tidak berhubungan dengan pelanggan ini.');
+        }
+
+        // Simpan setiap pesanan yang berhubungan dengan reservasi
+        foreach ($request->input('menu') as $menuItem) {
+            PesananModel::create([
+                'id_pelanggan' => $id_pelanggan,          // ID pelanggan dari sesi
+                'id_reservasi' => $reservasi->id,         // ID reservasi yang dipilih
+                'jumlah' => $menuItem['jumlah'],
+                'harga_total' => $menuItem['jumlah'] * $menuItem['harga'], // Hitung harga total
+                'id_menu' => $menuItem['id'], // id_menu dari menu item
+            ]);
+        }
+
+        return redirect()->route('pelanggan.dashboard')->with('success', 'Pesanan berhasil dibuat.');
+    }
+
 
 }
