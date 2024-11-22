@@ -17,32 +17,37 @@
         }
 
         /* Styling untuk kartu menu */
-        .menu-card {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
+        /* Styling untuk kartu menu */
+.menu-card {
+    width: 200px; /* Sesuaikan ukuran card */
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: auto;
+    padding: 10px;
+}
 
-        .menu-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        }
+.menu-card img {
+    height: 120px;
+    object-fit: cover;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
 
-        .menu-card img {
-            height: 200px;
-            object-fit: cover;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
+.menu-card .card-body {
+    padding: 10px;
+    text-align: center;
+}
 
-        .menu-card .card-body {
-            padding: 15px;
-            text-align: center;
-        }
+.menu-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
 
         /* Button styling */
         .btn-primary {
@@ -147,7 +152,7 @@
             <h3>Menu Spesial Hari Ini</h3>
             <div class="row">
                 @foreach ($menuItems as $item)
-                    <div class="col-md-4 mb-4">
+                    <div class="col-6 col-md-4 col-lg-3 mb-4 text-center">
                         <div class="card menu-card">
                             <img src="{{ asset($item->foto_menu) }}" class="card-img-top" alt="{{ $item->nama_menu }}">
                             <div class="card-body">
@@ -158,6 +163,7 @@
                     </div>
                 @endforeach
             </div>
+
         </div>
     </div>
 @endsection

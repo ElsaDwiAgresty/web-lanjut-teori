@@ -91,10 +91,10 @@
                     <td>{{ $menu->nama_menu }}</td>
                     <td>Rp {{ number_format($menu->harga_menu, 0, ',', '.') }}</td>
                     <td>
-                        <a href="" class="btn btn-warning btn-sm">
+                        <a href="{{ route('menu.edit', $menu->id_menu) }}" class="btn btn-warning btn-sm">
                             <i class="fa fa-edit"></i> Edit
                         </a>
-                        <form action="" method="POST" class="d-inline">
+                        <form action="{{ route('menu.delete', $menu->id_menu) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Anda yakin ingin menghapus menu ini?');">
@@ -107,5 +107,10 @@
             </tbody>
         </table>
     </div>
+    
+    <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+        <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">Kembali</a>
+    </div>
+
 </div>
 @endsection

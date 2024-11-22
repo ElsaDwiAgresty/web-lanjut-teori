@@ -11,6 +11,7 @@ class MenuModel extends Model
 
     protected $table = 'menu';
     protected $guarded = ['id_menu'];
+    protected $primaryKey = 'id_menu';
     protected $fillable = [
         'nama_menu',
         'harga_menu',

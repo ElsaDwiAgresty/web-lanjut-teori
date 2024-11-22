@@ -21,8 +21,12 @@ use App\Http\Controllers\PelangganController;
 //MENU
 Route::get('menu', [AdminController::class, 'indexMenu'])
     ->name('admin.menu.index');
-Route::get('menu/create', [AdminController::class, 'createMenu'])
-    ->name('admin.menu.create');
+Route::get('/admin/menu/create', [AdminController::class, 'createMenu'])->name('admin.menu.create');
+Route::post('/admin/menu/store', [AdminController::class, 'storeMenu'])->name('admin.menu.store'); 
+Route::get('/menu/edit/{id}', [AdminController::class, 'editMenu'])->name('menu.edit');
+Route::put('/menu/update/{id}', [AdminController::class, 'updateMenu'])->name('menu.update');
+Route::delete('/menu/delete/{id}', [AdminController::class, 'destroyMenu'])->name('menu.delete');
+
 
 //PELANGGAN
 Route::get('pelanggan', [AdminController::class, 'indexPelanggan'])
