@@ -88,9 +88,9 @@
         <div class="col-md-4 mb-4">
             <div class="card">
                 <div class="card-body text-center">
-                    <h5 class="card-title fw-bold">Laporan</h5>
-                    <p class="card-text">Lihat laporan penjualan dan aktivitas lainnya.</p>
-                    <a href="#" class="btn btn-primary">Lihat Laporan</a>
+                    <h5 class="card-title fw-bold">Ulasan</h5>
+                    <p class="card-text">Kelola Ulasan yang diberikan pelanggan</p>
+                    <a href="{{ route('admin.ulasan.index') }}" class="btn btn-primary">Kelola Ulasan</a>
                 </div>
             </div>
         </div>

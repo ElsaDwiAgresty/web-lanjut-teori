@@ -165,10 +165,10 @@ class AdminController extends Controller
     }
 
     public function editReservasi($id_reservasi)
-{
-    $reservasi = ReservasiModel::findOrFail($id_reservasi);
-    return view('Admin.reservasi.edit-reservasi', compact('reservasi')); // Pastikan nama view sesuai
-}
+    {
+        $reservasi = ReservasiModel::findOrFail($id_reservasi);
+        return view('Admin.reservasi.edit-reservasi', compact('reservasi')); // Pastikan nama view sesuai
+    }
 
     public function updateReservasi(Request $request, $id_reservasi)
     {
@@ -191,5 +191,22 @@ class AdminController extends Controller
         $reservasi->delete();
         return redirect()->route('admin.reservasi.index')->with('success', 'reservasi berhasil dihapus.');
     }
+
+    //kelola ulasan
+    public function Ulasan()
+    {
+        $ulasanItems = UlasanModel::all(); // Ambil data pelanggan dari database
+        return view('Admin.Ulasan.kelola-ulasan', compact('ulasanItems')); // Tampilkan view
+    }
+
+    public function replyUlasan(Request $request, $id_ulasan)
+    {
+        $ulasan = UlasanModel::where('id_ulasan', $id_ulasan)->firstOrFail();
+        $ulasan->balasan = $request->balasan;
+        $ulasan->save();
+
+        return redirect()->route('admin.ulasan.index')->with('success', 'Balasan berhasil dikirim.');
+    }
+
 
 }

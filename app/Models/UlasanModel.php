@@ -11,9 +11,11 @@ class UlasanModel extends Model
 
     protected $table = 'ulasan';
     protected $guarded = ['id_ulasan'];
+    protected $primaryKey = 'id_ulasan';
     protected $fillable = [
         'id_pelanggan',
-        'ulasan'
+        'ulasan',
+        'balasan'
     ];
 
     public function pelanggan() {
