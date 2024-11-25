@@ -133,106 +133,10 @@
 
     <!-- Content -->
     <div class="container my-4">
-        <h1 class="text-center mb-4">Selamat Datang di Restoran Kami!</h1>
-
-        <!-- Informasi Restoran -->
-        <div class="row mb-5">
-            <div class="col-md-6">
-                <h3>Informasi Restoran</h3>
-                <p>Selamat datang di restoran kami, tempat yang sempurna untuk menikmati makanan lezat bersama teman dan
-                    keluarga. Kami menawarkan berbagai hidangan yang terbuat dari bahan berkualitas tinggi dan disiapkan
-                    oleh chef berpengalaman.</p>
-                <p>Untuk reservasi, silakan klik tombol di bawah ini untuk memulai proses reservasi Anda.</p>
-                <a href="{{ session('role') == 'pelanggan' ? route('pelanggan.reservasi.create') : route('login') }}"
-                    class="btn btn-primary">
-                    Buat Reservasi
-                </a>
-            </div>
-            <div class="col-md-6">
-                <img src="{{ asset('img/restoran.jpg') }}" alt="Foto Restoran" class="img-fluid rounded"
-                    style="width: 100%; height: auto;">
-            </div>
+        <div class="mb-5">
+            <a href="{{ route('home') }}">< Kembali ke Home</a>
         </div>
-
-        <!-- Informasi Jenis Reservasi -->
-        <h3 class="mt-5">Jenis Reservasi</h3>
-        <div class="row g-3 mt-4">
-            @php
-                $jenisReservasi = [
-                    [
-                        'nama' => 'VIP',
-                        'gambar' => 'img/VipRoom.jpg',
-                        'deskripsi' => 'Reservasi eksklusif dengan pelayanan istimewa.',
-                    ],
-                    [
-                        'nama' => 'Couple',
-                        'gambar' => 'img/CoupleRoom.jpg',
-                        'deskripsi' => 'Ciptakan suasana romantis bersama pasangan.',
-                    ],
-                    [
-                        'nama' => 'Family',
-                        'gambar' => 'img/FamilyRoom.jpg',
-                        'deskripsi' => 'Nyaman untuk berkumpul bersama keluarga.',
-                    ],
-                    [
-                        'nama' => 'Group',
-                        'gambar' => 'img/GroupRoom.jpg',
-                        'deskripsi' => 'Ideal untuk acara bersama teman atau kolega.',
-                    ],
-                    [
-                        'nama' => 'Business',
-                        'gambar' => 'img/BusinessRoom.jpg',
-                        'deskripsi' => 'Lingkungan profesional untuk pertemuan bisnis.',
-                    ],
-                ];
-            @endphp
-
-            @foreach ($jenisReservasi as $reservasi)
-                <div class="col-12 col-md-6 col-lg-2 mb-4 d-flex justify-content-center">
-                    <div class="card menu-card w-100">
-                        <!-- Memperbesar gambar dengan memberi style langsung -->
-                        <img src="{{ asset($reservasi['gambar']) }}" class="card-img-top" alt="{{ $reservasi['nama'] }}"
-                            style="height: 180px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $reservasi['nama'] }}</h5>
-                            <p class="card-text">{{ $reservasi['deskripsi'] }}</p>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-
-
-        <!-- Waktu Reservasi -->
-        <h3>Waktu Reservasi</h3>
-        <div class="d-flex flex-wrap justify-content-center gap-3 reservasi-info">
-            @foreach (['13.00', '14.30', '17.00', '18.00', '20.00', '20.30'] as $time)
-                <div
-                    style="width: 150px; text-align: center; border: 1px solid #ddd; padding: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                    <h4>{{ $time }}</h4>
-                </div>
-            @endforeach
-        </div>
-
-        <!-- Menu Spesial Hari Ini -->
-        <h3 class="mt-12">Menu Spesial Hari Ini</h3>
-        <div class="row">
-            @foreach ($menuItems as $item)
-                <div class="col-6 col-md-4 col-lg-3 mb-4 text-center">
-                    <div class="card menu-card">
-                        <img src="{{ asset($item->foto_menu) }}" class="card-img-top" alt="{{ $item->nama_menu }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $item->nama_menu }}</h5>
-                            <p class="card-text">Rp{{ number_format($item->harga_menu, 0, ',', '.') }}</p>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-        <!-- Ulasan -->
-        <h3 class="mt-12">Ulasan</h3>
+        <h1 class="text-center mb-4">Ulasan</h1>
         @if (session('id_pelanggan') && session('role') == 'pelanggan')
             <form action="{{ route('pelanggan.ulasan.store') }}" method="POST">
                 @csrf
@@ -246,28 +150,19 @@
                     ulasan.</a>
             </div>
         @endif
-        <div class="ulasan">
-            @foreach ($reviews as $review)
-                <div class="row mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            {{ $review->pelanggan->nama }}
-                        </div>
-                        <div class="card-body">
-                            <blockquote class="blockquote mb-0">
-                                <p>{{ $review->ulasan }}</p>
-                            </blockquote>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
+        @foreach ($reviews as $review)
             <div class="row mb-4">
                 <div class="card">
+                    <div class="card-header">
+                        {{ $review->pelanggan->nama }}
+                    </div>
                     <div class="card-body">
-                        <a href="{{ route('pelanggan.ulasan.index') }}">Lihat Ulasan ></a>
+                        <blockquote class="blockquote mb-0">
+                            <p>{{ $review->ulasan }}</p>
+                        </blockquote>
                     </div>
                 </div>
             </div>
-        </div>
+        @endforeach
     </div>
 @endsection
