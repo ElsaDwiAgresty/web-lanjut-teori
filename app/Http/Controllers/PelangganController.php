@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UlasanModel;
 use Illuminate\Http\Request;
 use App\Models\PelangganModel;
 use App\Models\PesananModel;
@@ -16,11 +17,13 @@ class PelangganController extends Controller
     public $pelangganModel;
     public $menuModel;
     public $reservasiModel;
+    public $ulasanModel;
 
     public function __construct() {
         $this->pelangganModel = new PelangganModel();
         $this->menuModel = new MenuModel();
         $this->reservasiModel = new ReservasiModel();
+        $this->ulasanModel = new UlasanModel();
     }
 
     //RESERVASI
@@ -51,13 +54,13 @@ class PelangganController extends Controller
             'tgl_reservasi' => 'required|date|after_or_equal:today|before_or_equal:'.date('Y-m-d', strtotime('+3 days')),
             'waktu_reservasi' => 'required|in:13:00,14:30,17:00,18:00,20:00,20:30',
         ]);
-        
+
         // Simpan data reservasi ke dalam tabel
         $this->reservasiModel->create([
-            'id_pelanggan' => session('id_pelanggan'),  
+            'id_pelanggan' => session('id_pelanggan'),
             'tipe_reservasi' => $request->input('tipe_reservasi'),
             'nomor_meja' => $request->input('nomor_meja'),
-            'status' => 'Dalam Antrian',  
+            'status' => 'Dalam Antrian',
             'tgl_reservasi' => $request->input('tgl_reservasi'),
             'waktu_reservasi' => $request->input('waktu_reservasi')
         ]);
@@ -76,28 +79,22 @@ class PelangganController extends Controller
         return view('pelanggan/dashboardPelanggan', compact('data'));
     }
 
-    //MENU
-    public function indexMenu()
-    {
-        $menuItems = $this->menuModel->getMenu(); // Ambil semua item menu dari database
-        return view('home', compact('menuItems'));
-    }
-
     //HOME
     public function indexHome()
     {
         // Ambil data menu dari database
         $menuItems = $this->menuModel->getMenu();
 
+        $reviews = $this->ulasanModel->getFirstFiveNewestUlasan();
+
         $user = array();
         if($id = session('id_pelanggan'))
             $user = $this->pelangganModel->getPelanggan($id);
 
-        return view('home', compact('menuItems', ['user']));
+        return view('home', compact('menuItems', ['user', 'reviews']));
     }
 
     //PROFIL
-
     public function profil()
     {
         $data = array();
@@ -153,7 +150,7 @@ class PelangganController extends Controller
 
         // Ambil id_pelanggan dari sesi login
         $id_pelanggan = session('id_pelanggan');
-        
+
         // Pastikan id_reservasi berelasi dengan id_pelanggan yang sedang login
         $reservasi = ReservasiModel::where('id', $request->input('id_reservasi'))
                                 ->where('id_pelanggan', $id_pelanggan)
@@ -177,5 +174,28 @@ class PelangganController extends Controller
         return redirect()->route('pelanggan.dashboard')->with('success', 'Pesanan berhasil dibuat.');
     }
 
+    // ULASAN
+    public function indexUlasan() {
+        $reviews = $this->ulasanModel->getNewestAllUlasan();
+
+        $user = array();
+        if($id = session('id_pelanggan'))
+            $user = $this->pelangganModel->getPelanggan($id);
+
+        return view('ulasan', compact(['reviews', 'user']));
+    }
+
+    public function storeUlasan(Request $request) {
+        $request->validate([
+            'ulasan' => 'required|max:255'
+        ]);
+
+        $this->ulasanModel->create([
+            'id_pelanggan' => session('id_pelanggan'),
+            'ulasan' => $request->input('ulasan')
+        ]);
+
+        return redirect()->route('home')->with('success', 'Ulasan berhasil dibuat.');
+    }
 
 }

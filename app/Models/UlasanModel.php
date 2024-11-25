@@ -23,4 +23,12 @@ class UlasanModel extends Model
     public function getUlasan() {
         return $this->all();
     }
+
+    public function getFirstFiveNewestUlasan() {
+        return $this->orderBy('created_at', 'desc')->take(5)->get();
+    }
+
+    public function getNewestAllUlasan() {
+        return $this->orderBy('created_at', 'desc')->get();
+    }
 }
