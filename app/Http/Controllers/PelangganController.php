@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Session;
 class PelangganController extends Controller
 {
     // Instansi Model
-    public $pelangganModel;
-    public $menuModel;
-    public $reservasiModel;
-    public $ulasanModel;
+    protected $pelangganModel;
+    protected $menuModel;
+    protected $reservasiModel;
+    protected $ulasanModel;
 
     public function __construct() {
         $this->pelangganModel = new PelangganModel();
@@ -26,8 +26,34 @@ class PelangganController extends Controller
         $this->ulasanModel = new UlasanModel();
     }
 
-    //RESERVASI
-    // Menampilkan form reservasi
+    // HOME
+    public function indexHome()
+    {
+        $menuItems = $this->menuModel->getMenu();
+        $reviews = $this->ulasanModel->getFirstFiveNewestUlasan();
+
+        $user = [];
+        if ($id = session('id_pelanggan')) {
+            $user = $this->pelangganModel->getPelanggan($id);
+        }
+
+        return view('home', compact('menuItems', 'reviews', 'user'));
+    }
+
+    // DASHBOARD
+    public function dashboard()
+    {
+        $data = [];
+        if ($id = Session::get('id_pelanggan')) {
+            $data = $this->pelangganModel->getPelanggan($id);
+        }
+
+        $ulasanItems = $this->ulasanModel->where('id_pelanggan', $id)->latest()->get();
+
+        return view('pelanggan.dashboardPelanggan', compact('data', 'ulasanItems'));
+    }
+
+    // RESERVASI
     public function indexReservasi()
     {
         $menuItems = $this->menuModel->getMenu();
@@ -36,18 +62,12 @@ class PelangganController extends Controller
 
     public function reservasiSaya()
     {
-        // Ambil data reservasi berdasarkan id pelanggan yang sedang login
-        $reservasi = ReservasiModel::where('id_pelanggan', session('id_pelanggan'))->get();
-
-        // Tampilkan halaman dengan data reservasi
-        return view('Pelanggan.Reservasi.reservasi-saya', ['reservasi' => $reservasi]);
+        $reservasi = $this->reservasiModel->where('id_pelanggan', session('id_pelanggan'))->get();
+        return view('Pelanggan.Reservasi.reservasi-saya', compact('reservasi'));
     }
 
-
-    // Menyimpan data reservasi
     public function storeReservasi(Request $request)
     {
-        // Validasi input
         $request->validate([
             'tipe_reservasi' => 'required',
             'nomor_meja' => 'required',
@@ -55,52 +75,47 @@ class PelangganController extends Controller
             'waktu_reservasi' => 'required|in:13:00,14:30,17:00,18:00,20:00,20:30',
         ]);
 
-        // Simpan data reservasi ke dalam tabel
         $this->reservasiModel->create([
             'id_pelanggan' => session('id_pelanggan'),
             'tipe_reservasi' => $request->input('tipe_reservasi'),
             'nomor_meja' => $request->input('nomor_meja'),
             'status' => 'Dalam Antrian',
             'tgl_reservasi' => $request->input('tgl_reservasi'),
-            'waktu_reservasi' => $request->input('waktu_reservasi')
+            'waktu_reservasi' => $request->input('waktu_reservasi'),
         ]);
 
         return redirect()->route('pelanggan.dashboard')->with('success', 'Reservasi berhasil dibuat.');
     }
 
-    //DASHBOARD
-    public function dashboard()
+    // ULASAN
+    public function indexUlasan()
     {
-        // Ambil data pengguna yang login
-        $data = array();
-        if($id = Session::get('id_pelanggan')){
-            $data = $this->pelangganModel->getPelanggan($id);
-        }
-        return view('pelanggan/dashboardPelanggan', compact('data'));
+        $reviews = $this->ulasanModel->getNewestAllUlasan();
+        $user = session('id_pelanggan') ? $this->pelangganModel->getPelanggan(session('id_pelanggan')) : [];
+
+        return view('ulasan', compact('reviews', 'user'));
     }
 
-    //HOME
-    public function indexHome()
+    public function storeUlasan(Request $request)
     {
-        // Ambil data menu dari database
-        $menuItems = $this->menuModel->getMenu();
+        $request->validate(['ulasan' => 'required|max:255']);
 
-        $reviews = $this->ulasanModel->getFirstFiveNewestUlasan();
+        $this->ulasanModel->create([
+            'id_pelanggan' => session('id_pelanggan'),
+            'ulasan' => $request->input('ulasan'),
+        ]);
 
-        $user = array();
-        if($id = session('id_pelanggan'))
-            $user = $this->pelangganModel->getPelanggan($id);
-
-        return view('home', compact('menuItems', ['user', 'reviews']));
+        return redirect()->route('home')->with('success', 'Ulasan berhasil dibuat.');
     }
 
-    //PROFIL
+    // PROFIL
     public function profil()
     {
-        $data = array();
-        if($id = Session::get('id_pelanggan')){
+        $data = [];
+        if ($id = Session::get('id_pelanggan')) {
             $data = $this->pelangganModel->getPelanggan($id);
         }
+
         return view('Pelanggan.profile', compact('data'));
     }
 
@@ -109,93 +124,26 @@ class PelangganController extends Controller
         $request->validate([
             'nama' => 'required|string|max:255',
             'no_hp' => 'required|string|max:15',
-            'email' => 'required|email|unique:pelanggan,email,' . session('id_pelanggan') . ',id_pelanggan', // Validasi email unik dengan pengecualian email pelanggan saat ini
+            'email' => 'required|email|unique:pelanggan,email,' . session('id_pelanggan') . ',id_pelanggan',
             'password' => 'nullable|string|min:6',
         ]);
 
-        // Ambil data pelanggan berdasarkan sesi login
-        $pelanggan = PelangganModel::find(session('id_pelanggan'));
+        $pelanggan = $this->pelangganModel->find(session('id_pelanggan'));
 
         if (!$pelanggan) {
             return redirect()->route('pelanggan.profil')->withErrors('Pelanggan tidak ditemukan.');
         }
 
-        // Update data pelanggan
         $pelanggan->nama = $request->input('nama');
         $pelanggan->no_hp = $request->input('no_hp');
         $pelanggan->email = $request->input('email');
 
-        // Update password hanya jika diisi
         if ($request->filled('password')) {
             $pelanggan->password = Hash::make($request->input('password'));
         }
 
-        // Simpan perubahan
         $pelanggan->save();
 
         return redirect()->route('pelanggan.dashboard')->with('success', 'Profil berhasil diperbarui.');
     }
-
-
-    //PESANAN
-    public function storePesanan(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'id_reservasi' => 'required|exists:reservasi,id', // Pastikan id_reservasi ada di tabel reservasi
-            'menu' => 'required|array', // Asumsikan menu adalah array dari id_menu yang dipilih
-            'menu.*.jumlah' => 'required|integer|min:1',
-            'menu.*.harga' => 'required|numeric|min:0',
-        ]);
-
-        // Ambil id_pelanggan dari sesi login
-        $id_pelanggan = session('id_pelanggan');
-
-        // Pastikan id_reservasi berelasi dengan id_pelanggan yang sedang login
-        $reservasi = ReservasiModel::where('id', $request->input('id_reservasi'))
-                                ->where('id_pelanggan', $id_pelanggan)
-                                ->first();
-
-        if (!$reservasi) {
-            return redirect()->back()->withErrors('Reservasi tidak ditemukan atau tidak berhubungan dengan pelanggan ini.');
-        }
-
-        // Simpan setiap pesanan yang berhubungan dengan reservasi
-        foreach ($request->input('menu') as $menuItem) {
-            PesananModel::create([
-                'id_pelanggan' => $id_pelanggan,          // ID pelanggan dari sesi
-                'id_reservasi' => $reservasi->id,         // ID reservasi yang dipilih
-                'jumlah' => $menuItem['jumlah'],
-                'harga_total' => $menuItem['jumlah'] * $menuItem['harga'], // Hitung harga total
-                'id_menu' => $menuItem['id'], // id_menu dari menu item
-            ]);
-        }
-
-        return redirect()->route('pelanggan.dashboard')->with('success', 'Pesanan berhasil dibuat.');
-    }
-
-    // ULASAN
-    public function indexUlasan() {
-        $reviews = $this->ulasanModel->getNewestAllUlasan();
-
-        $user = array();
-        if($id = session('id_pelanggan'))
-            $user = $this->pelangganModel->getPelanggan($id);
-
-        return view('ulasan', compact(['reviews', 'user']));
-    }
-
-    public function storeUlasan(Request $request) {
-        $request->validate([
-            'ulasan' => 'required|max:255'
-        ]);
-
-        $this->ulasanModel->create([
-            'id_pelanggan' => session('id_pelanggan'),
-            'ulasan' => $request->input('ulasan')
-        ]);
-
-        return redirect()->route('home')->with('success', 'Ulasan berhasil dibuat.');
-    }
-
 }
