@@ -61,6 +61,14 @@ Route::post('ulasan/submit', [PelangganController::class, 'storeUlasan'])
 Route::get('ulasan', [PelangganController::class, 'indexUlasan'])
     ->name('pelanggan.ulasan.index');
 
+Route::get('ulasanAdmin', [AdminController::class, 'Ulasan'])
+->name('admin.ulasan.index');
+Route::delete('/ulasan/{id}', [AdminController::class, 'destroyUlasan'])
+    ->name('admin.ulasan.destroy');
+
+Route::post('/admin/ulasan/{id}/reply', [AdminController::class, 'replyUlasan'])->name('admin.ulasan.reply');
+
+
 //LOGIN, REGISTRASI, DAN LOGOUT
 Route::middleware('loginCheck')->group(function() {
     //LOGIN
