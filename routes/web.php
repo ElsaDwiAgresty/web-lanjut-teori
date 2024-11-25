@@ -22,7 +22,7 @@ use App\Http\Controllers\PelangganController;
 Route::get('menu', [AdminController::class, 'indexMenu'])
     ->name('admin.menu.index');
 Route::get('/admin/menu/create', [AdminController::class, 'createMenu'])->name('admin.menu.create');
-Route::post('/admin/menu/store', [AdminController::class, 'storeMenu'])->name('admin.menu.store'); 
+Route::post('/admin/menu/store', [AdminController::class, 'storeMenu'])->name('admin.menu.store');
 Route::get('/menu/edit/{id}', [AdminController::class, 'editMenu'])->name('menu.edit');
 Route::put('/menu/update/{id}', [AdminController::class, 'updateMenu'])->name('menu.update');
 Route::delete('/menu/delete/{id}', [AdminController::class, 'destroyMenu'])->name('menu.delete');
@@ -51,10 +51,15 @@ Route::delete('/reservasi/{id}', [AdminController::class, 'destroyReservasi'])
     ->name('admin.reservasi.destroy');
 
 //HOME
-Route::get('/', [PelangganController::class, 'indexMenu'])
-    ->name('home');
 Route::get('/', [PelangganController::class, 'indexHome'])
     ->name('home');
+
+//ULASAN
+Route::post('ulasan/submit', [PelangganController::class, 'storeUlasan'])
+    ->name('pelanggan.ulasan.store')
+    ->middleware('pelangganAuthCheck');
+Route::get('ulasan', [PelangganController::class, 'indexUlasan'])
+    ->name('pelanggan.ulasan.index');
 
 //LOGIN, REGISTRASI, DAN LOGOUT
 Route::middleware('loginCheck')->group(function() {
