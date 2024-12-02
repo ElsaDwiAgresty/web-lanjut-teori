@@ -91,6 +91,15 @@
                                 <i class="fa fa-trash"></i> Hapus
                             </button>
                         </form>
+
+                        <form action="{{ route('admin.pelanggan.updateStatusPelanggan', $pelanggan->id_pelanggan) }}" method="POST">
+                            @csrf
+                            <select name="status" class="form-select form-select-sm mb-2">
+                                <option value="Aktif" {{ $pelanggan->status == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                                <option value="NonAktif" {{ $pelanggan->status == 'NonAktif' ? 'selected' : '' }}>NonAktif</option>
+                            </select>
+                            <button type="submit" class="btn btn-success btn-sm">Update</button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach
