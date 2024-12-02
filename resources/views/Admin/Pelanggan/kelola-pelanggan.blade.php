@@ -56,6 +56,10 @@
         border-bottom: none; /* Hilangkan garis di baris terakhir */
     }
 
+    .btn-sm {
+        width: 4.5rem;
+    }
+
     /* Styling untuk form aksi dan tombol */
     .form-actions {
         display: flex;
@@ -64,9 +68,7 @@
         justify-content: flex-start;
     }
 
-    .form-actions button {
-        margin-top: 5px;
-    }
+    
 
     .form-actions select {
         margin-top: 5px;

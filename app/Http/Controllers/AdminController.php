@@ -20,7 +20,7 @@ class AdminController extends Controller
     
     public function indexMenu()
     {
-        $menuItems = MenuModel::all();
+        $menuItems = MenuModel::paginate(10);
         return view('Admin.Kelola.menu', compact('menuItems'));
     }
 
