@@ -17,7 +17,7 @@ class AdminController extends Controller
     }
 
     // Kelola Menu
-    
+
     public function indexMenu()
     {
         $menuItems = MenuModel::all();
@@ -43,7 +43,7 @@ class AdminController extends Controller
             $originalFileName = $request->file('foto_menu')->getClientOriginalName();
             $request->file('foto_menu')->move(public_path('img'), $originalFileName);
             $fotoMenuPath = 'img/' . $originalFileName;
-        }        
+        }
 
         MenuModel::create([
             'nama_menu' => $request->nama_menu,
@@ -58,7 +58,7 @@ class AdminController extends Controller
     public function editMenu($id_menu)
     {
         // Pastikan primary key di model sudah sesuai
-        $menu = MenuModel::findOrFail($id_menu); 
+        $menu = MenuModel::findOrFail($id_menu);
         return view('admin.kelola.edit-menu', compact('menu'));
     }
 
@@ -90,7 +90,7 @@ class AdminController extends Controller
         // Update data menu lainnya
         $menu->nama_menu = $request->input('nama_menu');
         $menu->harga_menu = $request->input('harga_menu');
-        
+
         // Simpan perubahan ke database
         $menu->save();
 
@@ -212,7 +212,7 @@ class AdminController extends Controller
     {
         $reservasi = ReservasiModel::findOrFail($id_reservasi);
         $reservasi->delete();
-        return redirect()->route('admin.reservasi.index')->with('success', 'reservasi berhasil dihapus.');
+        return redirect()->route('admin.reservasi.index')->with('success', 'Reservasi berhasil dihapus.');
     }
 
     //kelola ulasan
@@ -231,5 +231,11 @@ class AdminController extends Controller
         return redirect()->route('admin.ulasan.index')->with('success', 'Balasan berhasil dikirim.');
     }
 
+    public function destroyUlasan($id_ulasan)
+    {
+        $ulasan = UlasanModel::findOrFail($id_ulasan);
+        $ulasan->delete();
+        return redirect()->route('admin.ulasan.index')->with('success', 'Ulasan berhasil dihapus.');
+    }
 
 }
