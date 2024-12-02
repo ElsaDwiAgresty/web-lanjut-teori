@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use App\Models\MenuModel;
 use App\Models\ReservasiModel;
 use App\Models\UlasanModel;
 use App\Models\PelangganModel;
+
 
 class AdminController extends Controller
 {
@@ -122,14 +124,33 @@ class AdminController extends Controller
 
     public function updatePelanggan(Request $request, $id_pelanggan)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nama' => 'required|string',
             'email' => 'required|string',
             'no_hp' => 'nullable|string',
+            'alamat' => 'required|string|max:255',
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,avif|max:2048',
         ]);
 
         $pelanggan = PelangganModel::findOrFail($id_pelanggan);
-        $pelanggan->update($request->all());
+
+        if (!$pelanggan) {
+            return redirect()->route('admin.pelanggan.index')->with('error', 'Pelanggan tidak ditemukan.');
+        }
+
+        $pelanggan->nama = $request->input('nama');
+        $pelanggan->no_hp = $request->input('no_hp');
+        $pelanggan->email = $request->input('email');
+        $pelanggan->alamat = $request->input('alamat');
+
+        if($request->hasFile('foto_profil')) {
+            $fileName = time() . '_' . $validated['nama'] . '.' . $request->foto_profil->extension();
+            $request->foto_profil->move(public_path('img/profile'), $fileName);
+            $pelanggan->foto_profil = 'img/profile/' . $fileName;
+        }
+
+        $pelanggan->save();
+
         return redirect()->route('admin.pelanggan.index')->with('success', 'Pelanggan berhasil diupdate.');
     }
 

@@ -29,7 +29,7 @@
                     <h3>Edit Pelanggan</h3>
                 </div>
                 <div class="card-body">
-                <form action="{{ route('admin.pelanggan.updatePelanggan', $pelanggan->id_pelanggan) }}" method="POST">
+                <form action="{{ route('admin.pelanggan.updatePelanggan', $pelanggan->id_pelanggan) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="form-group">
@@ -43,6 +43,16 @@
                     <div class="form-group">
                         <label for="no_hp">No HP:</label>
                         <input type="text" name="no_hp" id="no_hp" class="form-control" value="{{ $pelanggan->no_hp }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="alamat">Alamat</label>
+                        <input type="text" name="alamat" id="alamat" class="form-control" value="{{ $pelanggan->alamat }}" required></input>
+                    </div>
+                    <div class="form-group">
+                        <label for="foto_profil">Foto Profil (Max. 2 MB)</label>
+                        <br><img src="{{ asset($pelanggan->foto_profil?? 'img/profile/default.webp') }}" alt="Foto Profil" width="100">
+                        <br><input type="file" name="foto_profil" class="form-control-file" id="foto_profil"
+                            accept="image/*">
                     </div>
                     <button type="submit" class="btn btn-success">Update</button>
                     <a href="{{ route('admin.pelanggan.index') }}" class="btn btn-secondary">Kembali</a>

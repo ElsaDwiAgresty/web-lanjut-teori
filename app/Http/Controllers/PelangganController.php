@@ -8,6 +8,7 @@ use App\Models\PelangganModel;
 use App\Models\PesananModel;
 use App\Models\MenuModel;
 use App\Models\ReservasiModel;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
@@ -121,10 +122,12 @@ class PelangganController extends Controller
 
     public function updateProfil(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'no_hp' => 'required|string|max:15',
             'email' => 'required|email|unique:pelanggan,email,' . session('id_pelanggan') . ',id_pelanggan',
+            'alamat' => 'required|string|max:255',
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,avif|max:2048',
             'password' => 'nullable|string|min:6',
         ]);
 
@@ -137,6 +140,13 @@ class PelangganController extends Controller
         $pelanggan->nama = $request->input('nama');
         $pelanggan->no_hp = $request->input('no_hp');
         $pelanggan->email = $request->input('email');
+        $pelanggan->alamat = $request->input('alamat');
+
+        if($request->hasFile('foto_profil')) {
+            $fileName = time() . '_' . $validated['nama'] . '.' . $request->foto_profil->extension();
+            $request->foto_profil->move(public_path('img/profile'), $fileName);
+            $pelanggan->foto_profil = 'img/profile/' . $fileName;
+        }
 
         if ($request->filled('password')) {
             $pelanggan->password = Hash::make($request->input('password'));
