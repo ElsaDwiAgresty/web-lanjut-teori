@@ -265,11 +265,9 @@
                 </div>
             @endforeach
 
-            <div class="row mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <a href="{{ route('pelanggan.ulasan.index') }}">Lihat Ulasan ></a>
-                    </div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <a href="{{ route('pelanggan.ulasan.index') }}">Lihat Ulasan ></a>
                 </div>
             </div>
         </div>

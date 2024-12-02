@@ -48,7 +48,7 @@
     }
 </style>
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Kelola pelanggan</h2>
+    <h2 class="text-center mb-4">Kelola Pelanggan</h2>
 
     <!-- Tampilkan pesan sukses -->
     @if(session('success'))
@@ -78,7 +78,7 @@
                     <td>{{ $pelanggan->email }}</td>
                     <td>{{ $pelanggan->no_hp }}</td>
                     <td>
-                        <a href="{{ $pelanggan->id_pelanggan ? route('admin.pelanggan.editPelanggan', ['id' => $pelanggan->id_pelanggan]) : '#' }}" class="btn btn-warning btn-sm" 
+                        <a href="{{ $pelanggan->id_pelanggan ? route('admin.pelanggan.editPelanggan', ['id' => $pelanggan->id_pelanggan]) : '#' }}" class="btn btn-warning btn-sm"
                             {{ !$pelanggan->id_pelanggan ? 'disabled' : '' }}>
                             <i class="fa fa-edit"></i> Edit
                         </a>

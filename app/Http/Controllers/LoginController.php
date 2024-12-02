@@ -15,7 +15,7 @@ class LoginController extends Controller
     public function __construct() {
         $this->pelangganModel = new PelangganModel();
     }
-    
+
     //LOGIN
     public function indexLogin()
     {
@@ -39,8 +39,8 @@ class LoginController extends Controller
             $request->session()->put('role', $user->role);
 
             // dd(Auth::check()); // Tambahkan ini untuk memeriksa status login
-            
-            // Redirect ke halaman dashboard 
+
+            // Redirect ke halaman dashboard
             if(Session::get('role') == 'pelanggan')
                 return redirect()->route('pelanggan.dashboard')->with('success', 'Anda berhasil login!');
             else if(Session::get('role') == 'admin')
@@ -48,7 +48,7 @@ class LoginController extends Controller
         }
 
         // Jika login gagal
-        return back()->withErrors(['login' => 'Email atau password salah.']);
+        return back()->with('error', 'Login gagal. E-mail atau password salah.');
     }
 
     //REGISTRASI
@@ -64,6 +64,8 @@ class LoginController extends Controller
             'nama' => 'required|string|max:255|min:3',
             'no_hp' => 'required|string|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|max:15',
             'email' => 'required|string|max:255|unique:pelanggan,email',
+            'alamat' => 'required|string|max:255',
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,avif|max:2048',
             'password' => 'required|string|min:8|max:255',
         ]);
 
@@ -71,15 +73,22 @@ class LoginController extends Controller
         $this->pelangganModel->nama = $validated['nama'];
         $this->pelangganModel->no_hp = $validated['no_hp'];
         $this->pelangganModel->email = $validated['email'];
-        $this->pelangganModel->password = Hash::make($validated['password']);;
-        
+        $this->pelangganModel->password = Hash::make($validated['password']);
+        $this->pelangganModel->alamat = $validated['alamat'];
+
+        if($request->hasFile('foto_profil')) {
+            $fileName = time() . '_' . $validated['nama'] . '.' . $request->foto_profil->extension();
+            $request->foto_profil->move(public_path('img/profile'), $fileName);
+            $this->pelangganModel->foto_profil = 'img/profile/' . $fileName;
+        }
+
         // Simpan ke database
         $this->pelangganModel->save();
 
         // Redirect kembali ke halaman form dengan pesan sukses
         return redirect()->route('pelanggan.login')->with('success', 'Registrasi berhasil, silahkan login.');
     }
-    
+
     //LOGOUT
     public function logout()
     {
