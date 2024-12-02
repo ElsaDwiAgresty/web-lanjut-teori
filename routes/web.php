@@ -38,6 +38,11 @@ Route::put('/pelanggan/update/{id}', [AdminController::class, 'updatePelanggan']
 Route::delete('/pelanggan/{id}', [AdminController::class, 'destroyPelanggan'])
     ->name('admin.pelanggan.destroy');
 
+Route::post('/admin/pelanggan/updateStatus/{id}', [AdminController::class, 'updateStatusPelanggan'])->name('admin.pelanggan.updateStatusPelanggan');
+
+//Route::post('/reservasi/updateStatus/{id}', [AdminController::class, 'updateStatusPelanggan']);
+
+
 //RESERVASI ADMIN
 Route::get('reservasi', [AdminController::class, 'indexReservasi'])
     ->name('admin.reservasi.index');

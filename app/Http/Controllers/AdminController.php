@@ -140,6 +140,29 @@ class AdminController extends Controller
         return redirect()->route('admin.pelanggan.index')->with('success', 'Pelanggan berhasil dihapus.');
     }
 
+    public function updateStatusPelanggan(Request $request, $id)
+    {
+        // Validasi input
+        $request->validate([
+            'status' => 'required|in:Aktif,NonAktif', // Status hanya boleh Aktif atau NonAktif
+        ]);
+
+        // Cari pelanggan berdasarkan ID
+        $pelanggan = PelangganModel::find($id);
+
+        if (!$pelanggan) {
+            return redirect()->route('admin.pelanggan.index')->with('error', 'Pelanggan tidak ditemukan.');
+        }
+
+        // Update status pelanggan
+        $pelanggan->status = $request->status;
+        $pelanggan->save();
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->route('admin.pelanggan.index')->with('success', 'Status pelanggan berhasil diperbarui.');
+    }
+
+
     //kelola reservasi
     public function indexReservasi()
     {

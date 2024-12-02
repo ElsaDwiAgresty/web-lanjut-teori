@@ -23,7 +23,8 @@ class PelangganModel extends Model implements AuthenticatableContract
         'alamat',
         'foto_profil',
         'password',
-        'role'
+        'role',
+        'status'
     ];
     protected $hidden = [
         'password'
