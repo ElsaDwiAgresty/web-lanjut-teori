@@ -29,7 +29,16 @@
                     <h3>Profil Pelanggan</h3>
                 </div>
                 <div class="card-body">
-                <form action="{{ route('pelanggan.updateProfil') }}" method="POST">
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @elseif ($errors->any())
+                        <div class="alert alert-danger">
+                            {!! implode('', $errors->all('<div>:message</div>')) !!}
+                        </div>
+                    @endif
+                <form action="{{ route('pelanggan.updateProfil') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -46,6 +55,18 @@
                     <div class="mb-3">
                         <label for="no_hp" class="form-label">Nomor HP</label>
                         <input type="text" class="form-control" id="no_hp" name="no_hp" value="{{ $data['no_hp'] }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="alamat" class="form-label">Alamat</label>
+                        <input type="text" class="form-control" id="alamat" name="alamat" value="{{ $data['alamat'] }}" required></input>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="foto_profil" class="form-label">Foto Profil (Max. 2 MB)</label>
+                        <br><img src="{{ asset($data['foto_profil']?? 'img/profile/default.webp') }}" alt="Foto Profil" width="100">
+                        <br><input type="file" name="foto_profil" class="form-control-file" id="foto_profil"
+                            accept="image/*">
                     </div>
 
                     <div class="mb-3">

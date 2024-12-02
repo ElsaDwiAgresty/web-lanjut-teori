@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use App\Models\MenuModel;
 use App\Models\ReservasiModel;
 use App\Models\UlasanModel;
 use App\Models\PelangganModel;
+
 
 class AdminController extends Controller
 {
@@ -17,7 +19,7 @@ class AdminController extends Controller
     }
 
     // Kelola Menu
-    
+
     public function indexMenu()
     {
         $menuItems = MenuModel::paginate(10);
@@ -43,7 +45,7 @@ class AdminController extends Controller
             $originalFileName = $request->file('foto_menu')->getClientOriginalName();
             $request->file('foto_menu')->move(public_path('img'), $originalFileName);
             $fotoMenuPath = 'img/' . $originalFileName;
-        }        
+        }
 
         MenuModel::create([
             'nama_menu' => $request->nama_menu,
@@ -58,7 +60,7 @@ class AdminController extends Controller
     public function editMenu($id_menu)
     {
         // Pastikan primary key di model sudah sesuai
-        $menu = MenuModel::findOrFail($id_menu); 
+        $menu = MenuModel::findOrFail($id_menu);
         return view('admin.kelola.edit-menu', compact('menu'));
     }
 
@@ -90,7 +92,7 @@ class AdminController extends Controller
         // Update data menu lainnya
         $menu->nama_menu = $request->input('nama_menu');
         $menu->harga_menu = $request->input('harga_menu');
-        
+
         // Simpan perubahan ke database
         $menu->save();
 
@@ -122,14 +124,33 @@ class AdminController extends Controller
 
     public function updatePelanggan(Request $request, $id_pelanggan)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nama' => 'required|string',
             'email' => 'required|string',
             'no_hp' => 'nullable|string',
+            'alamat' => 'required|string|max:255',
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,avif|max:2048',
         ]);
 
         $pelanggan = PelangganModel::findOrFail($id_pelanggan);
-        $pelanggan->update($request->all());
+
+        if (!$pelanggan) {
+            return redirect()->route('admin.pelanggan.index')->with('error', 'Pelanggan tidak ditemukan.');
+        }
+
+        $pelanggan->nama = $request->input('nama');
+        $pelanggan->no_hp = $request->input('no_hp');
+        $pelanggan->email = $request->input('email');
+        $pelanggan->alamat = $request->input('alamat');
+
+        if($request->hasFile('foto_profil')) {
+            $fileName = time() . '_' . $validated['nama'] . '.' . $request->foto_profil->extension();
+            $request->foto_profil->move(public_path('img/profile'), $fileName);
+            $pelanggan->foto_profil = 'img/profile/' . $fileName;
+        }
+
+        $pelanggan->save();
+
         return redirect()->route('admin.pelanggan.index')->with('success', 'Pelanggan berhasil diupdate.');
     }
 
@@ -212,7 +233,30 @@ class AdminController extends Controller
     {
         $reservasi = ReservasiModel::findOrFail($id_reservasi);
         $reservasi->delete();
-        return redirect()->route('admin.reservasi.index')->with('success', 'reservasi berhasil dihapus.');
+        return redirect()->route('admin.reservasi.index')->with('success', 'Reservasi berhasil dihapus.');
+    }
+
+    //kelola ulasan
+    public function Ulasan()
+    {
+        $ulasanItems = UlasanModel::all(); // Ambil data pelanggan dari database
+        return view('Admin.Ulasan.kelola-ulasan', compact('ulasanItems')); // Tampilkan view
+    }
+
+    public function replyUlasan(Request $request, $id_ulasan)
+    {
+        $ulasan = UlasanModel::where('id_ulasan', $id_ulasan)->firstOrFail();
+        $ulasan->balasan = $request->balasan;
+        $ulasan->save();
+
+        return redirect()->route('admin.ulasan.index')->with('success', 'Balasan berhasil dikirim.');
+    }
+
+    public function destroyUlasan($id_ulasan)
+    {
+        $ulasan = UlasanModel::findOrFail($id_ulasan);
+        $ulasan->delete();
+        return redirect()->route('admin.ulasan.index')->with('success', 'Ulasan berhasil dihapus.');
     }
 
     //kelola ulasan

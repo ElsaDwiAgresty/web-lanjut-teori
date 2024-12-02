@@ -20,6 +20,8 @@ class PelangganModel extends Model implements AuthenticatableContract
         'nama',
         'email',
         'no_hp',
+        'alamat',
+        'foto_profil',
         'password',
         'role',
         'status'
@@ -27,7 +29,7 @@ class PelangganModel extends Model implements AuthenticatableContract
     protected $hidden = [
         'password'
     ];
-    
+
     public function reservasi() {
         return $this->hasMany(ReservasiModel::class, 'id_reservasi');
     }
