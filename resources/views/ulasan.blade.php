@@ -151,6 +151,18 @@
             </div>
         @endif
         @foreach ($reviews as $review)
+
+            <div class="row mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        {{ $review->pelanggan->nama }}
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <p>{{ $review->ulasan }}</p>
+                        </blockquote>
+                    </div>
+
             <div class="card mb-4">
                 <div class="card-header">
                     {{ $review->pelanggan->nama }}
@@ -164,6 +176,7 @@
                             </footer>
                         @endif
                     </blockquote>
+
                 </div>
             </div>
         @endforeach

@@ -65,6 +65,34 @@
                     <a href="{{ route('pelanggan.logout') }}" class="btn btn-outline-dark mt-3">Logout</a>
                 </div>
 
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-bold">Kelola Pelanggan</h5>
+                    <p class="card-text">Lihat dan kelola data pelanggan.</p>
+                    <a href="{{ route('admin.pelanggan.index') }}" class="btn btn-primary">Kelola Pelanggan</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-bold">Reservasi</h5>
+                    <p class="card-text">Pantau dan atur reservasi pelanggan.</p>
+                    <a href="{{ route('admin.reservasi.index') }}" class="btn btn-primary">Kelola Reservasi</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-bold">Ulasan</h5>
+                    <p class="card-text">Kelola Ulasan yang diberikan pelanggan</p>
+                    <a href="{{ route('admin.ulasan.index') }}" class="btn btn-primary">Kelola Ulasan</a>
+
+
                 <div class="row">
                     <div class="col-md-4 mb-4">
                         <div class="card">
@@ -102,6 +130,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
     </div>
 @endsection

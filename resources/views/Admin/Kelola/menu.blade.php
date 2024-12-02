@@ -19,6 +19,10 @@
         background-color: #465c5c;
     }
 
+    .btn-sm {
+        width: 4.5rem;
+    }
+
     .card {
         border: none;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -79,7 +83,7 @@
             <tbody>
                 @foreach($menuItems as $menu)
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
+                <td>{{ $menuItems->firstItem() + $loop->index }}</td>
                     <!-- Menampilkan Foto -->
                     <td>
                         @if($menu->foto_menu)
@@ -97,7 +101,7 @@
                         <form action="{{ route('menu.delete', $menu->id_menu) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Anda yakin ingin menghapus menu ini?');">
+                            <button type="submit" class="btn btn-danger btn-sm text-centre" onclick="return confirm('Anda yakin ingin menghapus menu ini?');">
                                 <i class="fa fa-trash"></i> Hapus
                             </button>
                         </form>
@@ -106,6 +110,12 @@
                 @endforeach
             </tbody>
         </table>
+        @if($menuItems->hasPages())
+    <div class="d-flex justify-content-center">
+        {{ $menuItems->links('pagination::bootstrap-4') }}
+    </div>
+@endif
+
     </div>
     
     <div class="d-flex justify-content-between align-items-center mb-3 mt-5">

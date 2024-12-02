@@ -126,8 +126,10 @@ class PelangganController extends Controller
             'nama' => 'required|string|max:255',
             'no_hp' => 'required|string|max:15',
             'email' => 'required|email|unique:pelanggan,email,' . session('id_pelanggan') . ',id_pelanggan',
+
             'alamat' => 'required|string|max:255',
             'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,avif|max:2048',
+
             'password' => 'nullable|string|min:6',
         ]);
 

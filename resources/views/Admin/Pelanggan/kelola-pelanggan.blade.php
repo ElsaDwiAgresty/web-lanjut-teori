@@ -56,6 +56,12 @@
         border-bottom: none; /* Hilangkan garis di baris terakhir */
     }
 
+
+    .btn-sm {
+        width: 4.5rem;
+    }
+
+
     /* Styling untuk form aksi dan tombol */
     .form-actions {
         display: flex;
@@ -64,9 +70,13 @@
         justify-content: flex-start;
     }
 
+
+    
+
     .form-actions button {
         margin-top: 5px;
     }
+
 
     .form-actions select {
         margin-top: 5px;
@@ -106,7 +116,11 @@
                     <td>{{ $pelanggan->status }}</td>
                     <td>
                         <div class="form-actions">
+
+                            <a href="{{ $pelanggan->id_pelanggan ? route('admin.pelanggan.editPelanggan', ['id' => $pelanggan->id_pelanggan]) : '#' }}" class="btn btn-warning btn-sm" 
+
                             <a href="{{ $pelanggan->id_pelanggan ? route('admin.pelanggan.editPelanggan', ['id' => $pelanggan->id_pelanggan]) : '#' }}" class="btn btn-warning btn-sm"
+
                                 {{ !$pelanggan->id_pelanggan ? 'disabled' : '' }}>
                                 <i class="fa fa-edit"></i> Edit
                             </a>
@@ -120,17 +134,29 @@
                             </form>
                         </div>
 
+                        
+                        <form action="{{ route('admin.pelanggan.updateStatusPelanggan', $pelanggan->id_pelanggan) }}" method="POST">
+                            @csrf
+                            <div class="form-actions">
+                                <select name="status" class="form-select form-select-sm mb-2" 
+
+
                         <form action="{{ route('admin.pelanggan.updateStatusPelanggan', $pelanggan->id_pelanggan) }}" method="POST">
                             @csrf
                             <div class="form-actions">
                                 <select name="status" class="form-select form-select-sm mb-2"
+
                                     {{ $pelanggan->status == 'NonAktif' ? 'disabled' : '' }}>
                                     <option value="Aktif" {{ $pelanggan->status == 'Aktif' ? 'selected' : '' }}>Aktif</option>
                                     <option value="NonAktif" {{ $pelanggan->status == 'NonAktif' ? 'selected' : '' }}>NonAktif</option>
                                     <option value="Dalam Proses" {{ $pelanggan->status == 'Dalam Proses' ? 'selected' : '' }}>Dalam Proses</option>
                                 </select>
                                 @if($pelanggan->status != 'NonAktif')
+
+                                    <button type="submit" class="btn btn-success btn-sm {{ $pelanggan->status == 'NonAktif' ? 'disabled-btn' : '' }}" 
+
                                     <button type="submit" class="btn btn-success btn-sm {{ $pelanggan->status == 'NonAktif' ? 'disabled-btn' : '' }}"
+
                                         {{ $pelanggan->status == 'NonAktif' ? 'disabled' : '' }}>
                                         Update
                                     </button>

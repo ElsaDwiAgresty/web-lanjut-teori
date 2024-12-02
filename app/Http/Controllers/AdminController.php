@@ -22,7 +22,7 @@ class AdminController extends Controller
 
     public function indexMenu()
     {
-        $menuItems = MenuModel::all();
+        $menuItems = MenuModel::paginate(10);
         return view('Admin.Kelola.menu', compact('menuItems'));
     }
 
@@ -258,5 +258,22 @@ class AdminController extends Controller
         $ulasan->delete();
         return redirect()->route('admin.ulasan.index')->with('success', 'Ulasan berhasil dihapus.');
     }
+
+    //kelola ulasan
+    public function Ulasan()
+    {
+        $ulasanItems = UlasanModel::all(); // Ambil data pelanggan dari database
+        return view('Admin.Ulasan.kelola-ulasan', compact('ulasanItems')); // Tampilkan view
+    }
+
+    public function replyUlasan(Request $request, $id_ulasan)
+    {
+        $ulasan = UlasanModel::where('id_ulasan', $id_ulasan)->firstOrFail();
+        $ulasan->balasan = $request->balasan;
+        $ulasan->save();
+
+        return redirect()->route('admin.ulasan.index')->with('success', 'Balasan berhasil dikirim.');
+    }
+
 
 }
