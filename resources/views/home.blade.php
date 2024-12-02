@@ -256,7 +256,7 @@
                         <blockquote class="blockquote mb-0">
                             <p>{{ $review->ulasan }}</p>
                             @if($review->balasan)
-                                <footer class="blockquote-footer text-primary">
+                                <footer class="blockquote-footer">
                                     Admin: {{ $review->balasan }}
                                 </footer>
                             @endif
@@ -264,13 +264,8 @@
                     </div>
                 </div>
             @endforeach
-
-            <div class="row mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <a href="{{ route('pelanggan.ulasan.index') }}">Lihat Ulasan ></a>
-                    </div>
-                </div>
+            <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+                <a href="{{ route('pelanggan.ulasan.index') }}" class="btn btn-primary">Lihat Ulasan</a>
             </div>
         </div>
     </div>
