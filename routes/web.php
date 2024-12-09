@@ -67,9 +67,6 @@ Route::get('ulasan', [PelangganController::class, 'indexUlasan'])
     ->name('pelanggan.ulasan.index');
 
 Route::get('ulasanAdmin', [AdminController::class, 'Ulasan'])
-
-->name('admin.ulasan.index');
-
     ->name('admin.ulasan.index');
 
 Route::delete('/ulasan/{id}', [AdminController::class, 'destroyUlasan'])
