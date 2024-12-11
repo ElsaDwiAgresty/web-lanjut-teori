@@ -83,7 +83,6 @@
                             <i class="fa fa-edit"></i> Edit
                         </a>
 
-
                         <form action="{{ route('admin.pelanggan.destroy', $pelanggan->id_pelanggan) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
