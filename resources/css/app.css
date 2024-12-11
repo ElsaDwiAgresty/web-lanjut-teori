@@ -1,0 +1,22 @@
+/* styles.css */
+.menu-card {
+    width: 18rem;
+    margin: 10px;
+}
+.menu-card img {
+    height: 50px;
+    object-fit: cover;
+}
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+        body {
+            background-image: url('../img/Restoran.jpg'); /* Sesuaikan path jika perlu */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
