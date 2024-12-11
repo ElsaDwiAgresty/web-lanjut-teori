@@ -59,78 +59,51 @@
         <a href="{{ route('home') }}">
             < Kembali ke Home</a>
 
-                <div class="text-center mb-5">
-                    <h1>Selamat Datang, Admin!</h1>
-                    <p class="text-muted">Kelola semua data dan aktivitas dengan mudah di dashboard admin.</p>
-                    <a href="{{ route('pelanggan.logout') }}" class="btn btn-outline-dark mt-3">Logout</a>
+            <div class="text-center mb-5">
+                <h1>Selamat Datang, Admin!</h1>
+                <p class="text-muted">Kelola semua data dan aktivitas dengan mudah di dashboard admin.</p>
+                <a href="{{ route('pelanggan.logout') }}" class="btn btn-outline-dark mt-3">Logout</a>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title fw-bold">Kelola Pelanggan</h5>
+                            <p class="card-text">Lihat dan kelola data pelanggan.</p>
+                            <a href="{{ route('admin.pelanggan.index') }}" class="btn btn-primary">Kelola Pelanggan</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title fw-bold">Reservasi</h5>
+                            <p class="card-text">Pantau dan atur reservasi pelanggan.</p>
+                            <a href="{{ route('admin.reservasi.index') }}" class="btn btn-primary">Kelola Reservasi</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title fw-bold">Ulasan</h5>
+                            <p class="card-text">Kelola Ulasan yang diberikan pelanggan</p>
+                            <a href="{{ route('admin.ulasan.index') }}" class="btn btn-primary">Kelola Ulasan</a>
+                        </div>
+                    </div>
                 </div>
 
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title fw-bold">Kelola Menu</h5>
+                            <p class="card-text">Tambah, edit, dan hapus menu makanan.</p>
+                            <a href="{{ route('admin.menu.index') }}" class="btn btn-primary">Lihat Menu</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h5 class="card-title fw-bold">Kelola Pelanggan</h5>
-                    <p class="card-text">Lihat dan kelola data pelanggan.</p>
-                    <a href="{{ route('admin.pelanggan.index') }}" class="btn btn-primary">Kelola Pelanggan</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h5 class="card-title fw-bold">Reservasi</h5>
-                    <p class="card-text">Pantau dan atur reservasi pelanggan.</p>
-                    <a href="{{ route('admin.reservasi.index') }}" class="btn btn-primary">Kelola Reservasi</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h5 class="card-title fw-bold">Ulasan</h5>
-                    <p class="card-text">Kelola Ulasan yang diberikan pelanggan</p>
-                    <a href="{{ route('admin.ulasan.index') }}" class="btn btn-primary">Kelola Ulasan</a>
-
-
-                <div class="row">
-                    <div class="col-md-4 mb-4">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <h5 class="card-title fw-bold">Kelola Menu</h5>
-                                <p class="card-text">Tambah, edit, dan hapus menu makanan.</p>
-                                <a href="{{ route('admin.menu.index') }}" class="btn btn-primary">Lihat Menu</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <h5 class="card-title fw-bold">Kelola Pelanggan</h5>
-                                <p class="card-text">Lihat dan kelola data pelanggan.</p>
-                                <a href="{{ route('admin.pelanggan.index') }}" class="btn btn-primary">Kelola Pelanggan</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <h5 class="card-title fw-bold">Reservasi</h5>
-                                <p class="card-text">Pantau dan atur reservasi pelanggan.</p>
-                                <a href="{{ route('admin.reservasi.index') }}" class="btn btn-primary">Kelola Reservasi</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <h5 class="card-title fw-bold">Ulasan</h5>
-                                <p class="card-text">Kelola Ulasan yang diberikan pelanggan</p>
-                                <a href="{{ route('admin.ulasan.index') }}" class="btn btn-primary">Kelola Ulasan</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
     </div>
 @endsection
