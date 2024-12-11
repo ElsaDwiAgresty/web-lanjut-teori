@@ -60,11 +60,11 @@
 
     <!-- Tabel Daftar pelanggan -->
     <div class="table-responsive">
-        <table class="table table-bordered table-hover">
+        <table id="dataTable" class="table table-bordered table-hover">
             <thead class="thead-dark">
                 <tr>
                     <th>No</th>
-                    <th>Id Pelanggan</th>
+                    <th>Pelanggan</th>
                     <th>Ulasan</th>
                     <th>Balasan</th>
                     <th>Waktu Pembuatan</th>
@@ -75,13 +75,11 @@
                 @foreach($ulasanItems as $ulasan)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $ulasan->id_pelanggan}}</td>
+                    <td>{{ $ulasan->pelanggan->nama}}</td>
                     <td>{{ $ulasan->ulasan }}</td>
                     <td>{{ $ulasan->balasan }}</td>
                     <td>{{ $ulasan->created_at }}</td>
 
-
-                    
                     <td>
                         <form action="{{ route('admin.ulasan.reply', $ulasan->id_ulasan) }}" method="POST" class="mb-4">
                             @csrf
@@ -92,7 +90,7 @@
                                 <i class="fa fa-reply"></i> Balas
                             </button>
                         </form>
-                    
+
                         <form action="{{ route('admin.ulasan.destroy', $ulasan->id_ulasan) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
@@ -111,4 +109,31 @@
         </div>
     </div>
 </div>
+
+<!-- Tambahkan CDN DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<!-- Inisialisasi DataTables -->
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "responsive": true,
+            "language": {
+                "search": "Cari:",
+                "lengthMenu": "Tampilkan _MENU_ data",
+                "info": "Menampilkan _START_ hingga _END_ dari _TOTAL_ data",
+                "paginate": {
+                    "previous": "Sebelumnya",
+                    "next": "Berikutnya"
+                }
+            }
+        });
+    });
+</script>
 @endsection

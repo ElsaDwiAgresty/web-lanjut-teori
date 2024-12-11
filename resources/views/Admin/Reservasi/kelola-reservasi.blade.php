@@ -63,7 +63,7 @@
             <thead class="thead-dark">
                 <tr>
                     <th>No</th>
-                    <th>Id Pelanggan</th>
+                    <th>Pelanggan</th>
                     <th>Tipe Reservasi</th>
                     <th>Nomor Meja</th>
                     <th>Tanggal Reservasi</th>
@@ -77,7 +77,7 @@
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <!-- Menampilkan Foto -->
-                    <td>{{ $reservasi->id_pelanggan}}</td>
+                    <td>{{ $reservasi->pelanggan->nama}}</td>
                     <td>{{ $reservasi->tipe_reservasi }}</td>
                     <td>{{ $reservasi->nomor_meja }}</td>
                     <td>{{ $reservasi->tgl_reservasi }}</td>
@@ -88,25 +88,25 @@
                             @csrf
                             <div class="mb-2">
                                 <select name="status" class="form-select form-select-sm"
-                                
+
                                     {{$reservasi->status == 'Ditolak' ? 'disabled' : ''}}>
                                     <option value="OK" {{ $reservasi->status == 'OK' ? 'selected' : '' }}>OK</option>
                                     <option value="Dalam Antrian" {{ $reservasi->status == 'Dalam Antrian' ? 'selected' : '' }}>Dalam Antrian</option>
                                     <option value="Ditolak" {{ $reservasi->status == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
                                 </select>
                             </div>
-                            
+
                             <div class="d-flex gap-2">
                             @if($reservasi->status != 'Ditolak')
                                 <button type="submit" class="btn btn-success btn-sm">Update</button>
-                                
-                                <a href="{{ route('admin.reservasi.editReservasi', $reservasi->id_reservasi) }}" class="btn btn-warning btn-sm"> 
+                        </form>
+
+                                <a href="{{ route('admin.reservasi.editReservasi', $reservasi->id_reservasi) }}" class="btn btn-warning btn-sm">
 
                                 {{ !$reservasi->id_reservasi ? 'disabled' : ''}}
                                     <i class="fa fa-edit"></i> Edit
                                 </a>
                             @endif
-
                                 <form action="{{ route('admin.reservasi.destroy', $reservasi->id_reservasi) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
@@ -115,7 +115,6 @@
                                     </button>
                                 </form>
                             </div>
-                        </form>
                     </td>
 
                 </tr>

@@ -33,7 +33,7 @@ class LoginController extends Controller
         $user = PelangganModel::where('email', $credentials['email'])->first();
 
         // Jika pengguna ditemukan dan password sesuai
-        if ($user && Hash::check($credentials['password'], $user->password)) {
+        if ($user && Hash::check($credentials['password'], $user->password) && $user['status'] === 'Aktif') {
             // Simpan data pengguna ke sesi sebagai autentikasi manual
             $request->session()->put('id_pelanggan', $user->id_pelanggan);
             $request->session()->put('role', $user->role);
@@ -41,14 +41,19 @@ class LoginController extends Controller
             // dd(Auth::check()); // Tambahkan ini untuk memeriksa status login
 
             // Redirect ke halaman dashboard
-            if(Session::get('role') == 'pelanggan')
+            if(Session::get('role') == 'pelanggan') {
                 return redirect()->route('pelanggan.dashboard')->with('success', 'Anda berhasil login!');
-            else if(Session::get('role') == 'admin')
+            }
+            else if(Session::get('role') == 'admin') {
                 return redirect()->route('admin.dashboard')->with('success', 'Anda berhasil login!');
+            }
+        } else if($user['status'] === 'NonAktif') {
+            // Jika akun nonaktif
+            return back()->with('error', 'Login gagal. Akun Anda belum diaktifkan oleh Admin. Silakan tunggu atau hubungi ke admin restoran.');
+        } else {
+            // Jika login gagal
+            return back()->with('error', 'Login gagal. E-mail atau password salah.');
         }
-
-        // Jika login gagal
-        return back()->with('error', 'Login gagal. E-mail atau password salah.');
     }
 
     //REGISTRASI
@@ -86,7 +91,7 @@ class LoginController extends Controller
         $this->pelangganModel->save();
 
         // Redirect kembali ke halaman form dengan pesan sukses
-        return redirect()->route('pelanggan.login')->with('success', 'Registrasi berhasil, silahkan login.');
+        return redirect()->route('pelanggan.login')->with('success', 'Registrasi berhasil! Silakan tunggu konfirmasi dari admin untuk melakukan login.');
     }
 
     //LOGOUT

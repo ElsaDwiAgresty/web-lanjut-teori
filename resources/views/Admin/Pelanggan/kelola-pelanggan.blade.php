@@ -71,7 +71,7 @@
     }
 
 
-    
+
 
     .form-actions button {
         margin-top: 5px;
@@ -117,13 +117,11 @@
                     <td>
                         <div class="form-actions">
 
-                        @if($pelanggan->status != 'NonAktif')
                             <a href="{{ $pelanggan->id_pelanggan ? route('admin.pelanggan.editPelanggan', ['id' => $pelanggan->id_pelanggan]) : '#' }}" class="btn btn-warning btn-sm"
 
                                 {{ !$pelanggan->id_pelanggan ? 'disabled' : '' }}>
                                 <i class="fa fa-edit"></i> Edit
                             </a>
-                        @endif
                             <form action="{{ route('admin.pelanggan.destroy', $pelanggan->id_pelanggan) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
@@ -136,22 +134,15 @@
                         <form action="{{ route('admin.pelanggan.updateStatusPelanggan', $pelanggan->id_pelanggan) }}" method="POST">
                             @csrf
                             <div class="form-actions">
-                                <select name="status" class="form-select form-select-sm mb-2"
-
-                                    {{ $pelanggan->status == 'NonAktif' ? 'disabled' : '' }}>
+                                <select name="status" class="form-select form-select-sm mb-2">
                                     <option value="Aktif" {{ $pelanggan->status == 'Aktif' ? 'selected' : '' }}>Aktif</option>
                                     <option value="NonAktif" {{ $pelanggan->status == 'NonAktif' ? 'selected' : '' }}>NonAktif</option>
-                                    <option value="Dalam Proses" {{ $pelanggan->status == 'Dalam Proses' ? 'selected' : '' }}>Dalam Proses</option>
                                 </select>
-                                
-                                @if($pelanggan->status != 'NonAktif')
-                                    <button type="submit" class="btn btn-success btn-sm {{ $pelanggan->status == 'NonAktif' ? 'disabled-btn' : '' }}"
 
-                                        {{ $pelanggan->status == 'NonAktif' ? 'disabled' : '' }}>
-                                        Update
-                                    </button>
+                                <button type="submit" class="btn btn-success btn-sm">
+                                    Update
+                                </button>
 
-                                @endif
                             </div>
                         </form>
 

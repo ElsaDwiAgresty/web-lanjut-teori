@@ -160,27 +160,27 @@
             @php
                 $jenisReservasi = [
                     [
-                        'nama' => 'VIP',
+                        'nama' => 'VIP (6 orang)',
                         'gambar' => 'img/VipRoom.jpg',
                         'deskripsi' => 'Reservasi eksklusif dengan pelayanan istimewa.',
                     ],
                     [
-                        'nama' => 'Couple',
+                        'nama' => 'Couple (2 orang)',
                         'gambar' => 'img/CoupleRoom.jpg',
                         'deskripsi' => 'Ciptakan suasana romantis bersama pasangan.',
                     ],
                     [
-                        'nama' => 'Family',
+                        'nama' => 'Family (6-12 orang)',
                         'gambar' => 'img/FamilyRoom.jpg',
                         'deskripsi' => 'Nyaman untuk berkumpul bersama keluarga.',
                     ],
                     [
-                        'nama' => 'Group',
+                        'nama' => 'Group (2-12 orang)',
                         'gambar' => 'img/GroupRoom.jpg',
                         'deskripsi' => 'Ideal untuk acara bersama teman atau kolega.',
                     ],
                     [
-                        'nama' => 'Business',
+                        'nama' => 'Business (2-12 orang)',
                         'gambar' => 'img/BusinessRoom.jpg',
                         'deskripsi' => 'Lingkungan profesional untuk pertemuan bisnis.',
                     ],
@@ -188,7 +188,7 @@
             @endphp
 
             @foreach ($jenisReservasi as $reservasi)
-                <div class="col-12 col-md-6 col-lg-2 mb-4 d-flex justify-content-center">
+                <div class="col-12 col-md-6 col-lg-3 mb-4 d-flex justify-content-center">
                     <div class="card menu-card w-100">
                         <!-- Memperbesar gambar dengan memberi style langsung -->
                         <img src="{{ asset($reservasi['gambar']) }}" class="card-img-top" alt="{{ $reservasi['nama'] }}"
@@ -202,8 +202,6 @@
             @endforeach
         </div>
 
-
-
         <!-- Waktu Reservasi -->
         <h3>Waktu Reservasi</h3>
         <div class="d-flex flex-wrap justify-content-center gap-3 reservasi-info">
@@ -215,8 +213,8 @@
             @endforeach
         </div>
 
-        <!-- Menu Spesial Hari Ini -->
-        <h3 class="mt-12">Menu Spesial Hari Ini</h3>
+        <!-- Menu Tersedia -->
+        <h3 class="mt-12">Menu Tersedia</h3>
         <div class="row">
             @foreach ($menuItems as $item)
                 <div class="col-6 col-md-4 col-lg-3 mb-4 text-center">
@@ -265,7 +263,7 @@
                 </div>
             @endforeach
             <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
-                <a href="{{ route('pelanggan.ulasan.index') }}" class="btn btn-primary">Lihat Ulasan</a>
+                <a href="{{ route('pelanggan.ulasan.index') }}" class="btn btn-primary">Lihat Selengkapnya ></a>
             </div>
         </div>
     </div>

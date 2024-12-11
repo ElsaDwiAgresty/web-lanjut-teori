@@ -111,16 +111,16 @@ class AdminController extends Controller
     //Kelola Pelanggan
     public function indexPelanggan()
     {
-        $pelangganItems = PelangganModel::all(); // Ambil data pelanggan dari database
+        $pelangganItems = PelangganModel::where('role', 'pelanggan')->get(); // Ambil data pelanggan dari database
         return view('Admin.Pelanggan.kelola-pelanggan', compact('pelangganItems')); // Tampilkan view
     }
 
 
     public function editPelanggan($id_pelanggan)
-{
-    $pelanggan = PelangganModel::findOrFail($id_pelanggan);
-    return view('Admin.Pelanggan.edit-pelanggan', compact('pelanggan')); // Pastikan nama view sesuai
-}
+    {
+        $pelanggan = PelangganModel::findOrFail($id_pelanggan);
+        return view('Admin.Pelanggan.edit-pelanggan', compact('pelanggan')); // Pastikan nama view sesuai
+    }
 
     public function updatePelanggan(Request $request, $id_pelanggan)
     {
@@ -165,7 +165,7 @@ class AdminController extends Controller
     {
         // Validasi input
         $request->validate([
-            'status' => 'required|in:Aktif,NonAktif', // Status hanya boleh Aktif atau NonAktif
+            'status' => 'required|in:Aktif,NonAktif,Dalam Proses', // Status hanya boleh Aktif, NonAktif, dan Dalam Proses
         ]);
 
         // Cari pelanggan berdasarkan ID
@@ -239,7 +239,7 @@ class AdminController extends Controller
     //kelola ulasan
     public function Ulasan()
     {
-        $ulasanItems = UlasanModel::all(); // Ambil data pelanggan dari database
+        $ulasanItems = UlasanModel::paginate(10);; // Ambil data pelanggan dari database
         return view('Admin.Ulasan.kelola-ulasan', compact('ulasanItems')); // Tampilkan view
     }
 
