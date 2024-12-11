@@ -70,7 +70,7 @@
 
     <!-- Tabel Daftar Menu -->
     <div class="table-responsive">
-        <table class="table table-bordered table-hover">
+        <table id="dataTable" class="table table-bordered table-hover">
             <thead class="thead-dark">
                 <tr>
                     <th>No</th>
@@ -121,6 +121,32 @@
     <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
         <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">Kembali</a>
     </div>
-
 </div>
+
+<!-- Tambahkan CDN DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<!-- Inisialisasi DataTables -->
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "responsive": true,
+            "language": {
+                "search": "Cari:",
+                "lengthMenu": "Tampilkan _MENU_ data",
+                "info": "Menampilkan _START_ hingga _END_ dari _TOTAL_ data",
+                "paginate": {
+                    "previous": "Sebelumnya",
+                    "next": "Berikutnya"
+                }
+            }
+        });
+    });
+</script>
 @endsection
