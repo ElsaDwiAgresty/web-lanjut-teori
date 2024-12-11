@@ -59,7 +59,7 @@
 
     <!-- Tabel Daftar pelanggan -->
     <div class="table-responsive">
-        <table class="table table-bordered table-hover">
+        <table id="dataTable" class="table table-bordered table-hover">
             <thead class="thead-dark">
                 <tr>
                     <th>No</th>
@@ -86,26 +86,38 @@
                     <td>
                         <form action="{{ route('admin.reservasi.updateStatus', $reservasi->id_reservasi) }}" method="POST">
                             @csrf
-                            <select name="status" class="form-select form-select-sm mb-2">
-                                <option value="OK" {{ $reservasi->status == 'OK' ? 'selected' : '' }}>OK</option>
-                                <option value="Dalam Antrian" {{ $reservasi->status == 'Dalam Antrian' ? 'selected' : '' }}>Dalam Antrian</option>
-                                <option value="Ditolak" {{ $reservasi->status == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
-                            </select>
-                            <button type="submit" class="btn btn-success btn-sm">Update</button>
-                        </form>
-                    
-                        <a href="{{ route('admin.reservasi.editReservasi', $reservasi->id_reservasi) }}" class="btn btn-warning btn-sm">
-                            <i class="fa fa-edit"></i> Edit
-                        </a>
+                            <div class="mb-2">
+                                <select name="status" class="form-select form-select-sm"
+                                
+                                    {{$reservasi->status == 'Ditolak' ? 'disabled' : ''}}>
+                                    <option value="OK" {{ $reservasi->status == 'OK' ? 'selected' : '' }}>OK</option>
+                                    <option value="Dalam Antrian" {{ $reservasi->status == 'Dalam Antrian' ? 'selected' : '' }}>Dalam Antrian</option>
+                                    <option value="Ditolak" {{ $reservasi->status == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
+                                </select>
+                            </div>
+                            
+                            <div class="d-flex gap-2">
+                            @if($reservasi->status != 'Ditolak')
+                                <button type="submit" class="btn btn-success btn-sm">Update</button>
+                                
+                                <a href="{{ route('admin.reservasi.editReservasi', $reservasi->id_reservasi) }}" class="btn btn-warning btn-sm"> 
 
-                        <form action="{{ route('admin.reservasi.destroy', $reservasi->id_reservasi) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Anda yakin ingin menghapus pelanggan ini?');">
-                                <i class="fa fa-trash"></i> Hapus
-                            </button>
+                                {{ !$reservasi->id_reservasi ? 'disabled' : ''}}
+                                    <i class="fa fa-edit"></i> Edit
+                                </a>
+                            @endif
+
+                                <form action="{{ route('admin.reservasi.destroy', $reservasi->id_reservasi) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Anda yakin ingin menghapus pelanggan ini?');">
+                                        <i class="fa fa-trash"></i> Hapus
+                                    </button>
+                                </form>
+                            </div>
                         </form>
                     </td>
+
                 </tr>
                 @endforeach
             </tbody>
@@ -116,4 +128,31 @@
         </div>
     </div>
 </div>
+
+<!-- Tambahkan CDN DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<!-- Inisialisasi DataTables -->
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "responsive": true,
+            "language": {
+                "search": "Cari:",
+                "lengthMenu": "Tampilkan _MENU_ data",
+                "info": "Menampilkan _START_ hingga _END_ dari _TOTAL_ data",
+                "paginate": {
+                    "previous": "Sebelumnya",
+                    "next": "Berikutnya"
+                }
+            }
+        });
+    });
+</script>
 @endsection
