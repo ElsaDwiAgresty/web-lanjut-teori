@@ -100,6 +100,7 @@ class PelangganController extends Controller
 
     // Jika validasi lolos, simpan data
     DB::table('reservasi')->insert([
+        'id_pelanggan' => session('id_pelanggan'),
         'tgl_reservasi' => $request->tgl_reservasi,
         'waktu_reservasi' => $request->waktu_reservasi,
         'nomor_meja' => $request->nomor_meja,
@@ -108,7 +109,7 @@ class PelangganController extends Controller
         'updated_at' => now(),
     ]);
 
-    return redirect()->route('pelanggan.reservasi.index')->with('success', 'Reservasi berhasil!');
+    return redirect()->route('reservasi.saya')->with('success', 'Reservasi berhasil!');
 }
 
 
