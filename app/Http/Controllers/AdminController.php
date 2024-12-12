@@ -195,7 +195,7 @@ class AdminController extends Controller
     {
         // Validasi input
         $request->validate([
-            'status' => 'required|in:OK,Dalam Antrian,Ditolak',
+            'status' => 'required|in:OK,Dalam Antrian,Ditolak,Selesai',
         ]);
 
         // Cari data reservasi berdasarkan ID

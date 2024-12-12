@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_pelanggan');
             $table->string('tipe_reservasi');
             $table->integer('nomor_meja');
-            $table->enum('status', ['OK', 'Dalam Antrian', 'Ditolak']);
+            $table->enum('status', ['OK', 'Dalam Antrian', 'Ditolak', 'Selesai']);
             $table->timestamps();
             $table->foreign('id_pelanggan')->references('id_pelanggan')->on('pelanggan');
         });

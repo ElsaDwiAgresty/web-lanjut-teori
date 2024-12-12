@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\UlasanModel;
 use Illuminate\Http\Request;
 use App\Models\PelangganModel;
-use App\Models\PesananModel;
 use App\Models\MenuModel;
 use App\Models\ReservasiModel;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
+
 
 class PelangganController extends Controller
 {
@@ -38,8 +39,16 @@ class PelangganController extends Controller
             $user = $this->pelangganModel->getPelanggan($id);
         }
 
-        return view('home', compact('menuItems', 'reviews', 'user'));
+        $reservedTables = collect(DB::table('reservasi')
+        ->select('nomor_meja', 'tipe_reservasi', 'waktu_reservasi', 'tgl_reservasi')
+        ->whereIn('status', ['OK', 'Dalam Antrian'])
+        ->orderBy('tgl_reservasi', 'asc')
+        ->orderBy('waktu_reservasi', 'asc')
+        ->get());
+
+        return view('home', compact('menuItems', 'reviews', 'user', 'reservedTables'));
     }
+
 
     // DASHBOARD
     public function dashboard()
@@ -68,25 +77,40 @@ class PelangganController extends Controller
     }
 
     public function storeReservasi(Request $request)
-    {
-        $request->validate([
-            'tipe_reservasi' => 'required',
-            'nomor_meja' => 'required',
-            'tgl_reservasi' => 'required|date|after_or_equal:today|before_or_equal:'.date('Y-m-d', strtotime('+3 days')),
-            'waktu_reservasi' => 'required|in:13:00,14:30,17:00,18:00,20:00,20:30',
-        ]);
+{
+    $request->validate([
+        'tipe_reservasi' => 'required',
+        'nomor_meja' => 'required',
+        'tgl_reservasi' => 'required|date|after_or_equal:today|before_or_equal:'.date('Y-m-d', strtotime('+3 days')),
+        'waktu_reservasi' => 'required|in:13:00,14:30,17:00,18:00,20:00,20:30',
+    ]);
 
-        $this->reservasiModel->create([
-            'id_pelanggan' => session('id_pelanggan'),
-            'tipe_reservasi' => $request->input('tipe_reservasi'),
-            'nomor_meja' => $request->input('nomor_meja'),
-            'status' => 'Dalam Antrian',
-            'tgl_reservasi' => $request->input('tgl_reservasi'),
-            'waktu_reservasi' => $request->input('waktu_reservasi'),
-        ]);
+    // Cek apakah meja sudah direservasi
+    $isReserved = DB::table('reservasi')
+        ->where('tgl_reservasi', $request->tgl_reservasi)
+        ->where('waktu_reservasi', $request->waktu_reservasi)
+        ->where('nomor_meja', $request->nomor_meja)
+        ->exists();
 
-        return redirect()->route('pelanggan.dashboard')->with('success', 'Reservasi berhasil dibuat.');
+    if ($isReserved) {
+        return redirect()->back()->withErrors([
+            'nomor_meja' => 'Meja ini sudah direservasi pada tanggal dan waktu yang sama.',
+        ])->withInput();
     }
+
+    // Jika validasi lolos, simpan data
+    DB::table('reservasi')->insert([
+        'tgl_reservasi' => $request->tgl_reservasi,
+        'waktu_reservasi' => $request->waktu_reservasi,
+        'nomor_meja' => $request->nomor_meja,
+        'tipe_reservasi' => $request->tipe_reservasi,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    return redirect()->route('pelanggan.reservasi.index')->with('success', 'Reservasi berhasil!');
+}
+
 
     // ULASAN
     public function indexUlasan()

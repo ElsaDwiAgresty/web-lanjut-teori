@@ -38,8 +38,9 @@
     }
 
     /* Tombol utama */
+
     .btn-primary {
-        background-color: #007bff;
+        background-color: #2F4F4F;
         border: none;
         border-radius: 5px;
         padding: 10px 20px;
@@ -107,19 +108,27 @@
         </div>
         <div class="mb-3">
             <label for="nomor_meja" class="form-label">Nomor Meja</label>
-            <select class="form-control" id="nomor_meja" name="nomor_meja" required>
+            <select class="form-control @error('nomor_meja') is-invalid @enderror" id="nomor_meja" name="nomor_meja" required>
                 <option value="">Pilih nomor meja</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
+                @php
+                    $reservedTables = DB::table('reservasi')
+                        ->whereDate('tgl_reservasi', now()->toDateString())
+                        ->pluck('nomor_meja')
+                        ->toArray();
+                @endphp
+                @for ($i = 1; $i <= 10; $i++)
+                    @if (in_array($i, $reservedTables))
+                        <option value="{{ $i }}" disabled>{{ $i }} (Sedang direservasi)</option>
+                    @else
+                        <option value="{{ $i }}">{{ $i }}</option>
+                    @endif
+                @endfor
             </select>
+            @error('nomor_meja')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
 
         <div class="mb-3">
@@ -147,56 +156,30 @@
             </select>
         </div>
 
-
-        <!-- <div class="container my-4">
-            <h3>Pilih Menu</h3>
-            <div class="row">
-                @foreach ($menuItems as $item)
-                    <div class="col-md-4">
-                        <div class="card menu-card">
-                            <img src="{{ asset($item->foto_menu) }}" class="card-img-top" style="width: 100%; height: 200px; object-fit: cover" alt="{{ $item->nama_menu }}">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $item->nama_menu }}</h5>
-                                <p class="card-text">Rp{{ number_format($item->harga_menu, 0, ',', '.') }}</p>
-                                <div class="quantity-controls">
-                                    <button type="button" class="btn btn-outline-primary" onclick="decreaseQuantity('{{ $item->id }}')">-</button>
-                                    <span id="qty-{{ $item->id }}">0</span>
-                                    <input type="hidden" id="input-{{ $item->id }}" name="menu[{{ $item->id }}]" value="0">
-                                    <button type="button" class="btn btn-outline-primary" onclick="increaseQuantity('{{ $item->id }}')">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div> -->
-
         <button type="submit" class="btn btn-primary">Pesan</button>
     </form>
 </div>
 
-<!-- <script>
-    function increaseQuantity(id_menu) {
-        let qtyElement = document.getElementById('qty-' + id_menu);
-        let inputElement = document.getElementById('input-' + id_menu);
-        
-        // Ambil nilai saat ini dan tambahkan 1
-        let currentQty = parseInt(qtyElement.textContent);
-        qtyElement.textContent = currentQty + 1;
-        inputElement.value = currentQty + 1;
-    }
 
-    function decreaseQuantity(id_menu) {
-        let qtyElement = document.getElementById('qty-' + id_menu);
-        let inputElement = document.getElementById('input-' + id_menu);
-        
-        // Ambil nilai saat ini dan kurangi 1 (jika lebih besar dari 0)
-        let currentQty = parseInt(qtyElement.textContent);
-        if (currentQty > 0) {
-            qtyElement.textContent = currentQty - 1;
-            inputElement.value = currentQty - 1;
-        }
-    }
-</script> -->
+<div class="d-flex justify-content-between align-items-center mb-3 mt-5 px-4">
+            <a href="{{ route('home') }}" class="btn btn-primary">Kembali</a>
+        </div>
+
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 
 @endsection

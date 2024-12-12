@@ -93,6 +93,7 @@
                                     <option value="OK" {{ $reservasi->status == 'OK' ? 'selected' : '' }}>OK</option>
                                     <option value="Dalam Antrian" {{ $reservasi->status == 'Dalam Antrian' ? 'selected' : '' }}>Dalam Antrian</option>
                                     <option value="Ditolak" {{ $reservasi->status == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
+                                    <option value="Selesai" {{ $reservasi->status == 'Selesai' ? 'selected' : '' }}>Selesai</option>
                                 </select>
                             </div>
 

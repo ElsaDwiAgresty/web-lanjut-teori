@@ -94,6 +94,15 @@
             margin-bottom: 40px;
             /* Memberi jarak antara waktu reservasi dan menu */
         }
+
+        a {
+            color: #2F4F4F;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #465c5c;
+        }
     </style>
 
     <!-- Navbar -->
@@ -213,8 +222,40 @@
             @endforeach
         </div>
 
+        <div class="container mt-5 mb-5">
+            <h2>Daftar Meja yang Sudah Direservasi</h2>
+            
+            <div class="table-responsive mb-8">
+                <table id="dataTable" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nomor Meja</th>
+                            <th>Tipe Reservasi</th>
+                            <th>Waktu Reservasi</th>
+                            <th>Tanggal Reservasi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($reservedTables as $reservation)
+                            <tr>
+                                <td>{{ $reservation->nomor_meja }}</td>
+                                <td>{{ $reservation->tipe_reservasi }}</td>
+                                <td>{{ date('H:i', strtotime($reservation->waktu_reservasi)) }}</td>
+                                <td>{{ date('d-m-Y', strtotime($reservation->tgl_reservasi)) }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="text-center">Tidak ada reservasi</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
         <!-- Menu Tersedia -->
-        <h3 class="mt-12">Menu Tersedia</h3>
+        <h3 class="mt-16">Menu Tersedia</h3>
         <div class="row">
             @foreach ($menuItems as $item)
                 <div class="col-6 col-md-4 col-lg-3 mb-4 text-center">
@@ -262,9 +303,36 @@
                     </div>
                 </div>
             @endforeach
-            <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-10 mt-5">
                 <a href="{{ route('pelanggan.ulasan.index') }}" class="btn btn-primary">Lihat Selengkapnya ></a>
             </div>
         </div>
     </div>
+
+    <!-- Tambahkan CDN DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<!-- Inisialisasi DataTables -->
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "responsive": true,
+            "language": {
+                "search": "Cari:",
+                "lengthMenu": "Tampilkan _MENU_ data",
+                "info": "Menampilkan _START_ hingga _END_ dari _TOTAL_ data",
+                "paginate": {
+                    "previous": "Sebelumnya",
+                    "next": "Berikutnya"
+                }
+            }
+        });
+    });
+</script>
 @endsection
