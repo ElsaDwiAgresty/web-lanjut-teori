@@ -184,4 +184,41 @@ class PelangganController extends Controller
 
         return redirect()->route('pelanggan.dashboard')->with('success', 'Profil berhasil diperbarui.');
     }
+
+    public function getWaktu(Request $request)
+    {
+        $tglReservasi = $request->tgl_reservasi;
+        $waktuTersedia = ['13:00', '14:30', '17:00', '18:00', '20:00', '20:30'];
+
+        foreach ($waktuTersedia as $key => $waktu) {
+            $count = ReservasiModel::where('tgl_reservasi', $tglReservasi)
+                                    ->where('waktu_reservasi', $waktu)
+                                    ->count();
+
+            if ($count >= 10) { // Jika semua meja sudah dipesan
+                unset($waktuTersedia[$key]);
+            }
+        }
+
+        return response()->json(array_values($waktuTersedia));
+    }
+
+    public function getMeja(Request $request)
+    {
+        $tglReservasi = $request->tgl_reservasi;
+        $waktuReservasi = $request->waktu_reservasi;
+        $meja = range(1, 10);
+
+        $reservasi = ReservasiModel::where('tgl_reservasi', $tglReservasi)
+                                    ->where('waktu_reservasi', $waktuReservasi)
+                                    ->pluck('nomor_meja')->toArray();
+
+        foreach ($meja as $key => $m) {
+            if (in_array($m, $reservasi)) {
+                unset($meja[$key]);
+            }
+        }
+
+        return response()->json(array_values($meja));
+    }
 }

@@ -57,6 +57,8 @@ Route::middleware('pelangganAuthCheck')->group(function() {
     //RESERVASI
     Route::get('reservasi/create', [PelangganController::class, 'indexReservasi'])
         ->name('pelanggan.reservasi.create');
+    Route::post('/get-waktu', [PelangganController::class, 'getWaktu'])->name('reservasi.getWaktu');
+    Route::post('/get-meja', [PelangganController::class, 'getMeja'])->name('reservasi.getMeja');
     Route::post('reservasi/store', [PelangganController::class, 'storeReservasi'])
         ->name('pelanggan.reservasi.store');
     Route::get('reservasi-saya', [PelangganController::class, 'reservasiSaya'])
