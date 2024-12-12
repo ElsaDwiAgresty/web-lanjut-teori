@@ -21,7 +21,8 @@ class PelangganController extends Controller
     protected $reservasiModel;
     protected $ulasanModel;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->pelangganModel = new PelangganModel();
         $this->menuModel = new MenuModel();
         $this->reservasiModel = new ReservasiModel();
@@ -40,11 +41,11 @@ class PelangganController extends Controller
         }
 
         $reservedTables = collect(DB::table('reservasi')
-        ->select('nomor_meja', 'tipe_reservasi', 'waktu_reservasi', 'tgl_reservasi')
-        ->whereIn('status', ['OK', 'Dalam Antrian'])
-        ->orderBy('tgl_reservasi', 'asc')
-        ->orderBy('waktu_reservasi', 'asc')
-        ->get());
+            ->select('nomor_meja', 'tipe_reservasi', 'waktu_reservasi', 'tgl_reservasi')
+            ->whereIn('status', ['OK', 'Dalam Antrian'])
+            ->orderBy('tgl_reservasi', 'asc')
+            ->orderBy('waktu_reservasi', 'asc')
+            ->get());
 
         return view('home', compact('menuItems', 'reviews', 'user', 'reservedTables'));
     }
@@ -78,40 +79,42 @@ class PelangganController extends Controller
     }
 
     public function storeReservasi(Request $request)
-{
-    $request->validate([
-        'tipe_reservasi' => 'required',
-        'nomor_meja' => 'required',
-        'tgl_reservasi' => 'required|date|after_or_equal:today|before_or_equal:'.date('Y-m-d', strtotime('+3 days')),
-        'waktu_reservasi' => 'required|in:13:00,14:30,17:00,18:00,20:00,20:30',
-    ]);
+    {
+        $request->validate([
+            'tipe_reservasi' => 'required',
+            'nomor_meja' => 'required',
+            'tgl_reservasi' => 'required|date|after_or_equal:today|before_or_equal:' . date('Y-m-d', strtotime('+3 days')),
+            'waktu_reservasi' => 'required|in:13:00,14:30,17:00,18:00,20:00,20:30',
+        ]);
 
-    // Cek apakah meja sudah direservasi
-    $isReserved = DB::table('reservasi')
-        ->where('tgl_reservasi', $request->tgl_reservasi)
-        ->where('waktu_reservasi', $request->waktu_reservasi)
-        ->where('nomor_meja', $request->nomor_meja)
-        ->exists();
+        // Cek apakah meja sudah direservasi
+        $isReserved = DB::table('reservasi')
+            ->where('tgl_reservasi', $request->tgl_reservasi)
+            ->where('waktu_reservasi', $request->waktu_reservasi)
+            ->where('nomor_meja', $request->nomor_meja)
+            ->where('status', 'Dalam Antrian')
+            ->orWhere('status', 'OK')
+            ->exists();
 
-    if ($isReserved) {
-        return redirect()->back()->withErrors([
-            'nomor_meja' => 'Meja ini sudah direservasi pada tanggal dan waktu yang sama.',
-        ])->withInput();
+        if ($isReserved) {
+            return redirect()->back()->withErrors([
+                'nomor_meja' => 'Meja ini sudah direservasi pada tanggal dan waktu yang sama.',
+            ])->withInput();
+        }
+
+        // Jika validasi lolos, simpan data
+        DB::table('reservasi')->insert([
+            'id_pelanggan' => session('id_pelanggan'),
+            'tgl_reservasi' => $request->tgl_reservasi,
+            'waktu_reservasi' => $request->waktu_reservasi,
+            'nomor_meja' => $request->nomor_meja,
+            'tipe_reservasi' => $request->tipe_reservasi,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('reservasi.saya')->with('success', 'Reservasi berhasil!');
     }
-
-    // Jika validasi lolos, simpan data
-    DB::table('reservasi')->insert([
-        'id_pelanggan' => session('id_pelanggan'),
-        'tgl_reservasi' => $request->tgl_reservasi,
-        'waktu_reservasi' => $request->waktu_reservasi,
-        'nomor_meja' => $request->nomor_meja,
-        'tipe_reservasi' => $request->tipe_reservasi,
-        'created_at' => now(),
-        'updated_at' => now(),
-    ]);
-
-    return redirect()->route('reservasi.saya')->with('success', 'Reservasi berhasil!');
-}
 
 
     // ULASAN
@@ -170,7 +173,7 @@ class PelangganController extends Controller
         $pelanggan->email = $request->input('email');
         $pelanggan->alamat = $request->input('alamat');
 
-        if($request->hasFile('foto_profil')) {
+        if ($request->hasFile('foto_profil')) {
             $fileName = time() . '_' . $validated['nama'] . '.' . $request->foto_profil->extension();
             $request->foto_profil->move(public_path('img/profile'), $fileName);
             $pelanggan->foto_profil = 'img/profile/' . $fileName;
@@ -192,8 +195,8 @@ class PelangganController extends Controller
 
         foreach ($waktuTersedia as $key => $waktu) {
             $count = ReservasiModel::where('tgl_reservasi', $tglReservasi)
-                                    ->where('waktu_reservasi', $waktu)
-                                    ->count();
+                ->where('waktu_reservasi', $waktu)
+                ->count();
 
             if ($count >= 10) { // Jika semua meja sudah dipesan
                 unset($waktuTersedia[$key]);
@@ -210,8 +213,10 @@ class PelangganController extends Controller
         $meja = range(1, 10);
 
         $reservasi = ReservasiModel::where('tgl_reservasi', $tglReservasi)
-                                    ->where('waktu_reservasi', $waktuReservasi)
-                                    ->pluck('nomor_meja')->toArray();
+            ->where('waktu_reservasi', $waktuReservasi)
+            ->where('status', 'Dalam Antrian')
+            ->orWhere('status', 'OK')
+            ->pluck('nomor_meja')->toArray();
 
         foreach ($meja as $key => $m) {
             if (in_array($m, $reservasi)) {
