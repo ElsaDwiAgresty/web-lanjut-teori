@@ -93,6 +93,20 @@
 
 <div class="container">
     <h1 class="my-4">Form Data Reservasi</h1>
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <form action="{{ route('pelanggan.reservasi.store') }}" method="POST">
         @csrf
         <div class="mb-3">
@@ -133,13 +147,13 @@
 
         <div class="mb-3">
             <label for="tgl_reservasi" class="form-label">Tanggal Reservasi</label>
-            <input 
-                type="date" 
-                id="tgl_reservasi" 
-                name="tgl_reservasi" 
-                class="form-control" 
-                required 
-                min="{{ date('Y-m-d') }}" 
+            <input
+                type="date"
+                id="tgl_reservasi"
+                name="tgl_reservasi"
+                class="form-control"
+                required
+                min="{{ date('Y-m-d') }}"
                 max="{{ date('Y-m-d', strtotime('+3 days')) }}">
         </div>
 
@@ -164,22 +178,5 @@
 <div class="d-flex justify-content-between align-items-center mb-3 mt-5 px-4">
             <a href="{{ route('home') }}" class="btn btn-primary">Kembali</a>
         </div>
-
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
 
 @endsection

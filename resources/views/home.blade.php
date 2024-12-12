@@ -17,6 +17,8 @@
             color: #ffc107;
         }
 
+        .navbar-custom
+
         /* Styling untuk kartu menu */
         .menu-card {
             width: 200px;
@@ -85,8 +87,6 @@
         /* New styles */
         h3,
         h4 {
-            font-family: 'Arial', sans-serif;
-            /* Mengubah font untuk judul */
             margin-bottom: 20px;
         }
 
@@ -119,11 +119,15 @@
                         <li class="nav-item">
                             <a class="nav-link"
                                 href="{{ session('role') == 'pelanggan' ? route('pelanggan.dashboard') : route('admin.dashboard') }}">
+                                @if ($user['foto_profil'])
+                                    <img src="{{asset($user['foto_profil'])}}" width="48" height="48" style="border-radius: 50%; object-fit: cover" alt="">
+                                @else
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-person" viewBox="0 0 16 16">
                                     <path
                                         d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
                                 </svg>
+                                @endif
                                 {{ $user['nama'] }}
                             </a>
                         </li>
@@ -222,9 +226,9 @@
             @endforeach
         </div>
 
-        <div class="container mt-5 mb-5">
+        <div class="container my-5">
             <h2>Daftar Meja yang Sudah Direservasi</h2>
-            
+
             <div class="table-responsive mb-8">
                 <table id="dataTable" class="table table-bordered table-hover">
                     <thead>

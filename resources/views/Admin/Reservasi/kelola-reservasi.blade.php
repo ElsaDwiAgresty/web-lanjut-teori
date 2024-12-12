@@ -48,6 +48,9 @@
     }
 </style>
 <div class="container mt-5">
+    <a href="{{ route('admin.dashboard') }}">
+        < Kembali ke Dashboard</a>
+
     <h2 class="text-center mb-4">Kelola Reservasi</h2>
 
     <!-- Tampilkan pesan sukses -->
@@ -89,7 +92,7 @@
                             <div class="mb-2">
                                 <select name="status" class="form-select form-select-sm"
 
-                                    {{$reservasi->status == 'Ditolak' ? 'disabled' : ''}}>
+                                    {{$reservasi->status == 'Ditolak' || $reservasi->status == 'Selesai' ? 'disabled' : ''}}>
                                     <option value="OK" {{ $reservasi->status == 'OK' ? 'selected' : '' }}>OK</option>
                                     <option value="Dalam Antrian" {{ $reservasi->status == 'Dalam Antrian' ? 'selected' : '' }}>Dalam Antrian</option>
                                     <option value="Ditolak" {{ $reservasi->status == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
@@ -98,7 +101,7 @@
                             </div>
 
                             <div class="d-flex gap-2">
-                            @if($reservasi->status != 'Ditolak')
+                            @if($reservasi->status != 'Ditolak' && $reservasi->status != 'Selesai' )
                                 <button type="submit" class="btn btn-success btn-sm">Update</button>
                         </form>
 
@@ -122,10 +125,6 @@
                 @endforeach
             </tbody>
         </table>
-
-        <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">Kembali</a>
-        </div>
     </div>
 </div>
 

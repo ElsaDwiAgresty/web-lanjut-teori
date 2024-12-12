@@ -18,61 +18,13 @@ use App\Http\Controllers\PelangganController;
 |
 */
 
-//MENU
-Route::get('menu', [AdminController::class, 'indexMenu'])
-    ->name('admin.menu.index');
-Route::get('/admin/menu/create', [AdminController::class, 'createMenu'])->name('admin.menu.create');
-Route::post('/admin/menu/store', [AdminController::class, 'storeMenu'])->name('admin.menu.store');
-Route::get('/menu/edit/{id}', [AdminController::class, 'editMenu'])->name('menu.edit');
-Route::put('/menu/update/{id}', [AdminController::class, 'updateMenu'])->name('menu.update');
-Route::delete('/menu/delete/{id}', [AdminController::class, 'destroyMenu'])->name('menu.delete');
-
-
-//PELANGGAN
-Route::get('pelanggan', [AdminController::class, 'indexPelanggan'])
-    ->name('admin.pelanggan.index');
-Route::get('/pelanggan/edit/{id}', [AdminController::class, 'editPelanggan'])
-    ->name('admin.pelanggan.editPelanggan');
-Route::put('/pelanggan/update/{id}', [AdminController::class, 'updatePelanggan'])
-    ->name('admin.pelanggan.updatePelanggan');
-Route::delete('/pelanggan/{id}', [AdminController::class, 'destroyPelanggan'])
-    ->name('admin.pelanggan.destroy');
-
-Route::post('/admin/pelanggan/updateStatus/{id}', [AdminController::class, 'updateStatusPelanggan'])->name('admin.pelanggan.updateStatusPelanggan');
-
-//Route::post('/reservasi/updateStatus/{id}', [AdminController::class, 'updateStatusPelanggan']);
-
-
-//RESERVASI ADMIN
-Route::get('reservasi', [AdminController::class, 'indexReservasi'])
-    ->name('admin.reservasi.index');
-Route::post('/reservasi/{id}/update-status', [AdminController::class, 'updateStatusReservasi'])
-    ->name('admin.reservasi.updateStatus');
-Route::get('/reservasi/edit/{id}', [AdminController::class, 'editReservasi'])
-    ->name('admin.reservasi.editReservasi');
-Route::put('/reservasi/update/{id}', [AdminController::class, 'updateReservasi'])
-    ->name('admin.reservasi.updateReservasi');
-Route::delete('/reservasi/{id}', [AdminController::class, 'destroyReservasi'])
-    ->name('admin.reservasi.destroy');
-
 //HOME
 Route::get('/', [PelangganController::class, 'indexHome'])
     ->name('home');
 
-//ULASAN
-Route::post('ulasan/submit', [PelangganController::class, 'storeUlasan'])
-    ->name('pelanggan.ulasan.store')
-    ->middleware('pelangganAuthCheck');
+//ULASAN UNTUK TAMU
 Route::get('ulasan', [PelangganController::class, 'indexUlasan'])
     ->name('pelanggan.ulasan.index');
-
-Route::get('ulasanAdmin', [AdminController::class, 'Ulasan'])
-    ->name('admin.ulasan.index');
-
-Route::delete('/ulasan/{id}', [AdminController::class, 'destroyUlasan'])
-    ->name('admin.ulasan.destroy');
-
-Route::post('/admin/ulasan/{id}/reply', [AdminController::class, 'replyUlasan'])->name('admin.ulasan.reply');
 
 
 //LOGIN, REGISTRASI, DAN LOGOUT
@@ -92,28 +44,73 @@ Route::middleware('loginCheck')->group(function() {
         ->name('pelanggan.logout');
 });
 
-//DASHBOARD PELANGGAN
+//AUTH PELANGGAN
 Route::middleware('pelangganAuthCheck')->group(function() {
     //DASHBOARD
     Route::get('dashboard', [PelangganController::class, 'dashboard'])
         ->name('pelanggan.dashboard');
     //PROFIL
-    Route::get('dashboard/profile', [PelangganController::class, 'profil'])
+    Route::get('profile', [PelangganController::class, 'profil'])
         ->name('pelanggan.profil');
-    Route::put('dashboard/profile/update', [PelangganController::class, 'updateProfil'])
+    Route::put('profile/update', [PelangganController::class, 'updateProfil'])
         ->name('pelanggan.updateProfil');
     //RESERVASI
     Route::get('reservasi/create', [PelangganController::class, 'indexReservasi'])
         ->name('pelanggan.reservasi.create');
     Route::post('reservasi/store', [PelangganController::class, 'storeReservasi'])
         ->name('pelanggan.reservasi.store');
-    Route::get('dashboard/reservasi-saya', [PelangganController::class, 'reservasiSaya'])
+    Route::get('reservasi-saya', [PelangganController::class, 'reservasiSaya'])
         ->name('reservasi.saya');
+    //SUBMIT ULASAN UNTUK PELANGGAN
+    Route::post('ulasan/submit', [PelangganController::class, 'storeUlasan'])
+        ->name('pelanggan.ulasan.store');
 });
 
-//DASHBOARD ADMIN
-Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
-    ->name('admin.dashboard')
-    ->middleware('adminAuthCheck');
-
-Route::get('admin/menu', [AdminController::class, 'indexMenu'])->name('admin.menu.index');
+//AUTH ADMIN
+Route::middleware('adminAuthCheck')->group(function() {
+    //DASHBOARD
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
+        ->name('admin.dashboard');
+    //KELOLA ULASAN
+    Route::get('admin/ulasan', [AdminController::class, 'Ulasan'])
+        ->name('admin.ulasan.index');
+    Route::delete('admin/ulasan/{id}', [AdminController::class, 'destroyUlasan'])
+        ->name('admin.ulasan.destroy');
+    Route::post('/admin/ulasan/{id}/reply', [AdminController::class, 'replyUlasan'])
+        ->name('admin.ulasan.reply');
+    //KELOLA MENU
+    Route::get('admin/menu', [AdminController::class, 'indexMenu'])
+        ->name('admin.menu.index');
+    Route::get('admin/menu/create', [AdminController::class, 'createMenu'])
+        ->name('admin.menu.create');
+    Route::post('admin/menu/store', [AdminController::class, 'storeMenu'])
+        ->name('admin.menu.store');
+    Route::get('admin/menu/edit/{id}', [AdminController::class, 'editMenu'])
+        ->name('menu.edit');
+    Route::put('admin/menu/update/{id}', [AdminController::class, 'updateMenu'])
+        ->name('menu.update');
+    Route::delete('admin/menu/delete/{id}', [AdminController::class, 'destroyMenu'])
+        ->name('menu.delete');
+    //KELOLA PELANGGAN
+    Route::get('admin/pelanggan', [AdminController::class, 'indexPelanggan'])
+        ->name('admin.pelanggan.index');
+    Route::get('admin/pelanggan/edit/{id}', [AdminController::class, 'editPelanggan'])
+        ->name('admin.pelanggan.editPelanggan');
+    Route::put('admin/pelanggan/update/{id}', [AdminController::class, 'updatePelanggan'])
+        ->name('admin.pelanggan.updatePelanggan');
+    Route::delete('admin/pelanggan/delete/{id}', [AdminController::class, 'destroyPelanggan'])
+        ->name('admin.pelanggan.destroy');
+    Route::post('admin/pelanggan/updateStatus/{id}', [AdminController::class, 'updateStatusPelanggan'])
+        ->name('admin.pelanggan.updateStatusPelanggan');
+    //KELOLA RESERVASI
+    Route::get('admin/reservasi', [AdminController::class, 'indexReservasi'])
+        ->name('admin.reservasi.index');
+    Route::post('admin/reservasi/update-status/{id}', [AdminController::class, 'updateStatusReservasi'])
+        ->name('admin.reservasi.updateStatus');
+    Route::get('admin/reservasi/edit/{id}', [AdminController::class, 'editReservasi'])
+        ->name('admin.reservasi.editReservasi');
+    Route::put('admin/reservasi/update/{id}', [AdminController::class, 'updateReservasi'])
+        ->name('admin.reservasi.updateReservasi');
+    Route::delete('admin/reservasi/{id}', [AdminController::class, 'destroyReservasi'])
+        ->name('admin.reservasi.destroy');
+});

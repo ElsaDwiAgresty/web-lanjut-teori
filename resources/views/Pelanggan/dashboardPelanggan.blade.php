@@ -59,7 +59,13 @@
 
         <a href="{{ route('home') }}">
             < Kembali ke Home</a>
-
+                <div class="text-center">
+                    @if ($user['foto_profil'])
+                        <img src="{{asset($user['foto_profil'])}}" width="128" height="128" style="border-radius: 50%; object-fit: cover" alt="">
+                    @else
+                        <img src="{{asset('img/profile/default.webp')}}" width="128" height="128" style="border-radius: 50%; object-fit: cover"  alt="">
+                    @endif
+                </div>
                 <div class="text-center mb-5">
                     <h1>Halo, {{ $data['nama'] }}!</h1>
                     <p class="text-muted">Selamat datang di dashboard pelanggan.</p>

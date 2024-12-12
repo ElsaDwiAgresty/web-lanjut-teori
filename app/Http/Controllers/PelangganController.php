@@ -53,6 +53,7 @@ class PelangganController extends Controller
     // DASHBOARD
     public function dashboard()
     {
+        $user = $this->pelangganModel->getPelanggan(session('id_pelanggan'));
         $data = [];
         if ($id = Session::get('id_pelanggan')) {
             $data = $this->pelangganModel->getPelanggan($id);
@@ -60,7 +61,7 @@ class PelangganController extends Controller
 
         $ulasanItems = $this->ulasanModel->where('id_pelanggan', $id)->latest()->get();
 
-        return view('pelanggan.dashboardPelanggan', compact('data', 'ulasanItems'));
+        return view('pelanggan.dashboardPelanggan', compact('data', 'ulasanItems', 'user'));
     }
 
     // RESERVASI

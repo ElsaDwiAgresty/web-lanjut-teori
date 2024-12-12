@@ -2,6 +2,14 @@
 
 @section('content')
 <style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    h1 {
+        color: #2F4F4F;
+    }
+
     .btn-primary {
         background-color: #2F4F4F;
         border: none;
@@ -41,7 +49,7 @@
                         <input type="number" name="harga_menu" id="harga_menu" class="form-control" value="{{ $menu->harga_menu }}" required>
                     </div>
                     <div class="form-group">
-                        <label for="foto_menu" class="form-label">Foto Menu:</label>
+                        <label for="foto_menu" class="form-label">Foto Menu (opsional):</label>
                         @if ($menu->foto_menu)
                             <div class="mb-3">
                                 <img src="{{ asset($menu->foto_menu) }}" alt="Foto Menu" class="img-thumbnail" style="max-height: 200px;">

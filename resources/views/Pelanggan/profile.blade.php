@@ -2,6 +2,14 @@
 
 @section('content')
 <style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    h1 {
+        color: #2F4F4F;
+    }
+
     .btn-primary {
         background-color: #2F4F4F;
         border: none;

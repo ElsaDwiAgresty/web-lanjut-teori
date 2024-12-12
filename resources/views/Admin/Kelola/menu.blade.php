@@ -52,6 +52,9 @@
     }
 </style>
 <div class="container mt-5">
+    <a href="{{ route('admin.dashboard') }}">
+        < Kembali ke Dashboard</a>
+
     <h2 class="text-center mb-4">Kelola Menu</h2>
 
     <!-- Tampilkan pesan sukses -->
@@ -116,10 +119,6 @@
     </div>
 @endif
 
-    </div>
-    
-    <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
-        <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">Kembali</a>
     </div>
 </div>
 

@@ -2,6 +2,14 @@
 @section('content')
 
 <style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    h1 {
+        color: #2F4F4F;
+    }
+
     .btn-primary {
         background-color: #2F4F4F;
         border: none;
@@ -11,9 +19,20 @@
     .btn-primary:hover {
         background-color: #0056b3;
     }
+
+    a {
+        color: #2F4F4F;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #465c5c;
+    }
 </style>
 
 <div class="container my-5">
+    <a href="{{ route('pelanggan.dashboard') }}">
+        < Kembali ke Dashboard</a>
     <div class="text-center mb-4">
         <h2 class="fw-bold">Reservasi Saya</h2>
         <p class="text-muted">Lihat status reservasi Anda di sini</p>
@@ -44,11 +63,11 @@
                             <td>{{ $item->tgl_reservasi}}</td>
                             <td>{{ $item->waktu_reservasi}}</td>
                             <td>
-                                <span class="badge 
-                                    @if($item->status == 'OK') bg-success 
+                                <span class="badge
+                                    @if($item->status == 'OK') bg-success
                                     @elseif($item->status == 'Dalam Antrian') bg-warning
-                                    @elseif($item->status == 'Selesai') bg-primary 
-                                    @else bg-danger 
+                                    @elseif($item->status == 'Selesai') bg-primary
+                                    @else bg-danger
                                     @endif">
                                     {{ $item->status }}
                                 </span>
@@ -59,10 +78,6 @@
             </table>
         </div>
     @endif
-
-    <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
-            <a href="{{ route('pelanggan.dashboard') }}" class="btn btn-primary">Kembali</a>
-        </div>
 </div>
 
 <!-- Tambahkan CDN DataTables -->
